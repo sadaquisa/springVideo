@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="index :: head">
+</head>
+<meta charset="utf-8"/>
+<body>
+<div class="principal-container">
+	<div th:replace="dashboard :: navigation">
+	</div>
+	<div class="main">
+		<div th:replace="dashboard :: topbar">
+		</div>
+		<div class="content">
+			<h2>CREAR VIDEO</h2>
+			<div class="space">
+			</div>				
+			<form id="videoCreateForm" th:action="@{/video/create}" th:object="${video}"  method="post" enctype="multipart/form-data">
+				<div class="form-group">						
+					<div class="row" style="margin: 0;padding: 0;">
+						<div class="col-3" align="center" style="margin: 0;padding: 0;">
+							<label for="codigo" >PORTADA</label>								
+							<img id="imgfoto"  name="imgfoto" style="max-width: 100%; height: 450px;"  src="https://png.pngtree.com/element_our/png_detail/20181227/movie-icon-which-is-designed-for-all-application-purpose-new-png_287896.jpg" alt="foto" />				
+						</div>
+						<div class="col-1">
+						</div>
+						<div class="row col-8" style="margin: 0;padding: 0;">
+							<div class="col-12" style="margin: 0;padding: 0;">
+								<label for="codigo" >TITULO</label>
+								<div>
+									<input class="form-control" type="text" name="titulo"  onKeyUp="this.value=this.value.toUpperCase();"   id="titulo" th:field="*{titulo}">			
+								</div>
+								<div class="error" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
+							</div>
+							<div class="col-6" style="padding-left: 0;">
+								<label for="codigo" >AÑO</label>
+								<div>
+									<input class="form-control" type="number" name="anio" id="anio" th:field="*{anio}">			
+								</div>
+								<div class="error" th:if="${#fields.hasErrors('anio')}" th:errors="*{anio}"></div>
+							</div>
+							<div class="col-6">
+								<label for="codigo" >CANTIDAD</label>
+								<div>
+									<input class="form-control" type="number" name="cantidad" id="cantidad" th:field="*{cantidad}">			
+								</div>								
+								<div class="error" th:if="${#fields.hasErrors('cantidad')}" th:errors="*{cantidad}"></div>
+							</div>
+							<div class="col-6" style="padding-left: 0;">
+								<label for="codigo" >PRECIO</label>
+								<div>
+									<input class="form-control" type="number" name="precio" id="precio" th:field="*{precio}">			
+								</div>
+								<div class="error" th:if="${#fields.hasErrors('precio')}" th:errors="*{precio}"></div>	
+							</div>	
+							<div class="col-6">										
+								<label for="codigo" >FORMATO</label>
+								<div>
+									<select class="form-control" name="id_form" id="id_form"  th:path="id_form">
+										<option th:each="item:${formatos}" th:value="${item.id_formato}"  th:text=${item.formato}>
+									</select>	
+								</div>
+							</div>	
+							<div class="col-6" style="padding-left: 0;">
+								<label for="codigo" >GENEROS</label>
+								<div>
+									<select class="select-multiple form-control" multiple name="id_gen" id="id_gen"  th:path="id_genero">
+										<option th:each="item:${generos}" th:value="${item.id_genero}"  th:text=${item.genero}>
+									</select>	
+								</div>
+							</div>	
+							<div class="col-6">	
+								<label for="codigo" >IDIOMAS</label>
+								<div>
+									<select class="form-control" multiple name="id_idi" id="id_idi"  th:path="id_idi">
+										<option th:each="item:${idiomas}" th:value="${item.id_idioma}"  th:text=${item.idioma}>
+									</select>	
+								</div>
+							</div>
+							<div class="col-12" style="margin: 0;padding: 0;">
+								<label for="codigo" >SELECCIONE PORTADA</label>
+								<div>
+									<input type="file" accept=".jpeg,.jpg"  name="fotoinput" id="fotoinput"class="form-control"  onchange="Validar(this);"/>
+									<div class="error" th:if="${#fields.hasErrors('portada')}" th:errors="*{portada}"></div>
+								</div>								
+							</div>
+						</div>				
+					</div>							
+				</div>							
+				<div>			
+					<a class="btn btn-info" href="#" onclick="confirmVideoCreate()"><i class="fa-solid fa-floppy-disk"></i> GUARDAR</a>
+					<a class="btn btn-dark" th:href="@{/video/list}"><i class="fa-solid fa-arrow-rotate-left"></i> VOLVER</a>	
+				</div>	
+			</form>
+		</div>
+	</div>
+	<script>
+		const Toast = Swal.mixin({
+			  toast: true,
+			  position: 'bottom-end',
+			  showConfirmButton: false,
+			  timer: 3000,
+			  timerProgressBar: true,
+			  didOpen: (toast) => {
+			    toast.addEventListener('mouseenter', Swal.stopTimer)
+			    toast.addEventListener('mouseleave', Swal.resumeTimer)
+			  }
+		})
+		
+		let toggle = document.querySelector('.toggle');
+		let navigation = document.querySelector('.navigation');
+		let main = document.querySelector('.main');
+		
+		toggle.onclick = function(){
+			navigation.classList.toggle('active');
+			main.classList.toggle('active');
+		}
+		
+		let datosgenerales = document.querySelector('.datosgenerales');
+		let videoGerente = document.querySelector('.videoGerente');
+		let rol = document.querySelector('.rol');
+		let usuario = document.querySelector('.usuario');
+		let formato = document.querySelector('.formato');
+		let genero = document.querySelector('.genero');
+		let idioma = document.querySelector('.idioma');
+		let urbanizacion = document.querySelector('.urbanizacion');
+		let cliente = document.querySelector('.cliente');
+		let video = document.querySelector('.video');
+		let ficha = document.querySelector('.ficha');
+		let listficha = document.querySelector('.listficha');
+	
+	
+		
+		 window.onload=function(){
+			if(window.location.href.indexOf("rol")!="-1"){
+				rol.classList.add('hovered');
+			}
+			else if(window.location.href.indexOf("usuario")!="-1"){
+				usuario.classList.add('hovered');
+			}
+			else if(window.location.href.indexOf("formato")!="-1"){
+				formato.classList.add('hovered');
+			}else if(window.location.href.indexOf("genero")!="-1"){
+				genero.classList.add('hovered');
+			}else if(window.location.href.indexOf("idioma")!="-1"){
+				idioma.classList.add('hovered');
+			}else if(window.location.href.indexOf("urbanizacion")!="-1"){
+				urbanizacion.classList.add('hovered');
+			}else if(window.location.href.indexOf("cliente/datoGenerales")!="-1"){
+				datosgenerales.classList.add('hovered');
+			}else if(window.location.href.indexOf("video/listvideos")!="-1"){
+				videoGerente.classList.add('hovered');
+			}else if(window.location.href.indexOf("ficha/listficha")!="-1"){
+				listficha.classList.add('hovered');
+			}else if(window.location.href.indexOf("cliente")!="-1"){
+				cliente.classList.add('hovered');
+			}else if(window.location.href.indexOf("ficha")!="-1"){
+				ficha.classList.add('hovered');
+			}else if(window.location.href.indexOf("video")!="-1"){
+				video.classList.add('hovered');
+			}
+			else{
+				rol.classList.remove('hovered');
+				usuario.classList.remove('hovered');
+				formato.classList.remove('hovered');
+				urbanizacion.classList.remove('hovered');
+				genero.classList.remove('hovered');
+				idioma.classList.remove('hovered');
+				urbanizacion.classList.remove('hovered');
+				cliente.classList.remove('hovered');
+				video.classList.remove('hovered');
+				ficha.classList.remove('hovered');
+				datosgenerales.classList.remove('hovered');
+				listficha.classList.remove('hovered');
+				videoGerente.classList.remove('hovered');
+			}
+		 }
+			
+		function confirmVideoCreate(){
+			Swal.fire({
+			  title: 'CONFIRMACIÓN',
+			  text: "¿Desea guardar este nuevo video?",
+			  icon: 'question',
+			  showCancelButton: true,
+			  confirmButtonColor: '#3085d6',
+			  cancelButtonColor: '#d33',
+			  confirmButtonText: 'SI',
+			  cancelButtonText: 'NO'
+			}).then((result) => {
+			  if (result.isConfirmed) {
+				  var selectgen=false,selectidi;
+				  for (var option of document.getElementById('id_gen').options)
+				    {
+				        if (option.selected) {
+				        	selectgen=true;
+				        }
+				    }
+				  for (var option of document.getElementById('id_idi').options)
+				    {
+				        if (option.selected) {
+				        	selectidi=true;
+				        }
+				    }
+			  	if(parseInt(document.getElementById("cantidad").value)<=parseInt(0) || parseFloat(document.getElementById("precio").value)<=parseFloat(0.0)){
+					 Toast.fire({
+		                    icon: 'error',
+		                    title: 'Verifique la cantidad y el precio se han mayores a 0'
+		            })
+				}else{
+					 if(!selectgen){
+						 Toast.fire({
+			                    icon: 'error',
+			                    title: 'Seleccione por lo menos un genero'
+			            })
+					 }else{
+						 if(!selectidi){
+							 Toast.fire({
+				                    icon: 'error',
+				                    title: 'Seleccione por lo menos un idioma'
+				            })
+						 }else{
+							 if(document.getElementById("fotoinput").value==""){
+								 Toast.fire({
+					                    icon: 'error',
+					                    title: 'Seleccione una portada'
+					            })
+							 }else{
+									$('#videoCreateForm').submit();
+									localStorage.setItem("confirmVideoCreate",true);								 
+							 }							 
+						 }
+					 }					
+				
+				}
+			  
+			  }
+			})
+		}
+		
+        function Validar(obj)
+	    {
+	        var uploadFile = obj.files[0];
+	        if (!(/\.(jpg|jpeg)$/i).test(uploadFile.name)) {
+	            Toast.fire({
+	                    icon: 'error',
+	                    title: 'El archivo a adjuntar no es una imagen de tipo jpg o jpeg'
+	            })
+	            $('#fotoinput').val("");
+	            document.getElementById("imgfoto").style.display = "none";
+	        }else{
+	            var img = new Image();
+	            Toast.fire({
+                    icon: 'success',
+                    title: 'Correctamente adjuntado'
+                })                                       
+                document.getElementById("imgfoto").style.display = "block";                 
+	        }     
+	        img.src = URL.createObjectURL(uploadFile);
+	    } 
+	    function readURL(input) {
+	        if (input.files && input.files[0]) { //Revisamos que el input tenga contenido
+	            var reader = new FileReader(); //Leemos el contenido
+	            
+	            reader.onload = function(e) { //Al cargar el contenido lo pasamos como atributo de la imagen de arriba
+	                //document.getElementById("imgfirma").style.display = "block";
+	                $('#imgfoto').attr('src', e.target.result);
+		            console.log(e.target.result);
+
+	            }
+	            
+	            reader.readAsDataURL(input.files[0]);
+	        }
+	    }
+	   
+	    $("#fotoinput").change(function() { //Cuando el input cambie (se cargue un nuevo archivo) se va a ejecutar de nuevo el cambio de imagen y se verá reflejado.
+		    readURL(this);		    	
+	    });   
+	    
+	    $("select.select-multiple").select2({
+		  theme: "bootstrap4"
+		});
+		
+		$('select.form-control').select2({
+		  theme: "bootstrap4"
+		});
+	
+	</script>
+</body>
+</html>

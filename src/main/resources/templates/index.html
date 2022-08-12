@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:fragment="head">
+	<meta charset="utf-8"/>
+	<title th:text="'IWP | '+ ${tituloPagina}"></title>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/jquery-ui.min.css" />
+	<link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+	<!-- Select2 -->
+  	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css">
+  	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css">
+  	<!-- Ni Idea CSS -->
+	<link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+	<link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+	<link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+	<!-- Main CSS -->
+	<link href="/assets/css/variables.css" rel="stylesheet">
+	<link href="/assets/css/main.css" rel="stylesheet">
+	<link href="/css/style.css" rel="stylesheet">
+	<link href="/css/slide.css" rel="stylesheet">
+	<link href="/css/tooltip.css" rel="stylesheet">
+	<!-- Fonts -->
+	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet">
+	
+	<!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>	
+    <!-- Bootstrap -->
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
+	<script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- Select2 -->
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+	<!-- Font Awesome -->
+	<script src="https://kit.fontawesome.com/8aa296ee95.js" crossorigin="anonymous"></script>
+	<!-- Sweet Alert -->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<!-- Chart JS -->
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<!-- Moments JS -->
+	<script src="http://momentjs.com/downloads/moment.min.js"></script>
+	<!-- Glightbox JS -->
+	<script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
+	<!-- Swiper JS -->
+	<script src="/assets/vendor/swiper/swiper-bundle.min.js"></script>
+	<!-- AOS JS -->
+	<script src="/assets/vendor/aos/aos.js"></script>
+	<!-- Main JS -->
+	<script src="/js/template.js"></script>
+</head>
+<body>	
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top" data-scrollto-offset="0">
+    <div class="container-fluid d-flex align-items-center justify-content-between">
+
+      <a href="/" class="logo d-flex align-items-center scrollto me-auto me-lg-0">
+        <!-- Uncomment the line below if you also wish to use an image logo -->
+        <!-- <img src="assets/img/logo.png" alt=""> -->
+        <h1>IWP</h1>
+      </a>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto" href="index.html#cta">Acerca de</a></li>
+          <li><a class="nav-link scrollto" href="index.html#featured-services">Tecnologías</a></li>
+          <li><a class="nav-link scrollto" href="index.html#services">Mantenedores</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle d-none"></i>
+      </nav>
+      <div sec:authorize="isAuthenticated()">
+      	<a class="btn-getstarted" href="/dashboard">Inicio</a>      	
+      </div>
+      <div sec:authorize="!isAuthenticated()">
+	      <a class="btn-getstarted" href="/login">Login</a>
+      </div>	  
+
+    </div>
+  </header><!-- End Header -->
+
+  <section id="hero-animated" class="hero-animated d-flex align-items-center">
+    <div class="container d-flex flex-column justify-content-center align-items-center text-center position-relative" data-aos="zoom-out">
+      <img src="assets/img/hero-carousel/hero-carousel-3.svg" class="img-fluid animated">
+      <h2>Bienvenido a <span>Ing. Web Project</span></h2>
+      <p>Desarrollado por el GRUPO 03</p>
+    </div>
+  </section>
+
+  <main id="main">
+
+    <!-- ======= Call To Action Section ======= -->
+    <section id="cta" class="cta">
+      <div class="container">
+        <div class="row g-5">
+          <div class="col-lg-7 col-md-6 content d-flex flex-column justify-content-center order-last order-md-first">
+            <h3><em>IWP</em> (Ing. Web Project)</h3>
+            <br>
+            <p>
+            	El presente proyecto surge como idea del Ing. Marcelino Torres para el curso de Ingeniería 
+            	Web dictado a los alumnos de 9eno ciclo de la Universidad Nacional de Trujillo.
+            </p>
+          </div>
+          <div class="col-lg-5 col-md-6 order-first order-md-last d-flex align-items-center">
+            <div class="img">
+              <img src="assets/img/img1.jpg" alt="Alumnos del 9eno ciclo de la UNT" class="img-fluid">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section><!-- End Call To Action Section -->
+
+    <!-- ======= Featured Services Section ======= -->
+    <section id="featured-services" class="featured-services">
+    	<div class="section-header">
+	      <h2>Tecnologías</h2>
+	    </div>
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-xl-4 col-md-6 d-flex" data-aos="zoom-out">
+            <div class="service-item position-relative">
+              <div class="icon"><i class="fa-brands fa-html5"></i></div>
+              <h4>HTML</h4>
+              <p>HyperText Markup Language, hace referencia al lenguaje de marcado para la elaboración de páginas web basándose en etiquetas.</p>
+            </div>
+          </div><!-- End Service Item -->
+          <div class="col-xl-4 col-md-6 d-flex" data-aos="zoom-out" data-aos-delay="200">
+            <div class="service-item position-relative">
+              <div class="icon"><i class="fa-brands fa-css3-alt"></i></div>
+              <h4>CSS</h4>
+              <p>Cascading Style Sheets es un lenguaje de diseño gráfico para definir la presentación de un documento estructurado escrito en un lenguaje de marcado.</p>
+            </div>
+          </div><!-- End Service Item -->
+          <div class="col-xl-4 col-md-6 d-flex" data-aos="zoom-out" data-aos-delay="400">
+            <div class="service-item position-relative">
+              <div class="icon"><i class="fa-brands fa-js-square"></i></div>
+              <h4>JavaScript</h4>
+              <p>Es un lenguaje de programación interpretado, se define como orientado a objetos, basado en prototipos, imperativo, débilmente tipado y dinámico.</p>
+            </div>
+          </div><!-- End Service Item -->
+          <div class="col-xl-4 col-md-6 d-flex" data-aos="zoom-out" data-aos-delay="600">
+            <div class="service-item position-relative">
+              <div class="icon"><i class="fa-brands fa-bootstrap"></i></div>
+              <h4>Bootstrap</h4>
+              <p>Es una biblioteca de código abierto para diseño de sitios y aplicaciones web. Contiene plantillas de diseño con elementos de diseño basado en HTML, CSS y JS.</p>
+            </div>
+          </div><!-- End Service Item -->
+          <div class="col-xl-4 col-md-6 d-flex" data-aos="zoom-out" data-aos-delay="600">
+            <div class="service-item position-relative">
+              <div class="icon"><i class="fa-brands fa-java"></i></div>
+              <h4>Spring Framework</h4>
+              <p>Es un framework para el desarrollo de aplicaciones y contenedor de inversión de control, de código abierto para la plataforma Java.</p>
+            </div>
+          </div><!-- End Service Item -->
+          <div class="col-xl-4 col-md-6 d-flex" data-aos="zoom-out" data-aos-delay="600">
+            <div class="service-item position-relative">
+              <div class="icon"><i class="fa-solid fa-database"></i></div>
+              <h4>MySQL</h4>
+              <p>Es un sistema de gestión de bases de datos relacional considerada como la base de datos de código abierto más popular del mundo.</p>
+            </div>
+          </div><!-- End Service Item -->
+        </div>
+      </div>
+    </section><!-- End Featured Services Section -->
+
+    <!-- ======= Services Section ======= -->
+    <section id="services" class="services">
+      <div class="container" data-aos="fade-up">
+        <div class="section-header">
+          <h2>Tablas Principales</h2>
+        </div>
+        <div class="row gy-5 pb-5">
+          <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="200">
+            <div class="service-item">
+              <div class="img">
+                <img src="assets/img/services-1.jpg" class="img-fluid" alt="">
+              </div>
+              <div class="details position-relative">
+                <div class="icon">
+                  <i class="bi bi-tag-fill"></i>
+                </div>
+                <h3>Roles</h3>
+                <p>Se almacena todos los roles del sistema</p>
+              </div>
+            </div>
+          </div><!-- End Service Item -->
+          <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="300">
+            <div class="service-item">
+              <div class="img">
+                <img src="assets/img/services-2.jpg" class="img-fluid" alt="">
+              </div>
+              <div class="details position-relative">
+                <div class="icon">
+                  <i class="fa-solid fa-user"></i>
+                </div>
+                <h3>Usuarios</h3>
+                <p>Se almacena todos los usuarios del sistema, con su respectivo rol</p>
+              </div>
+            </div>
+          </div><!-- End Service Item -->
+          <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="400">
+            <div class="service-item">
+              <div class="img">
+                <img src="assets/img/services-3.jpg" class="img-fluid" alt="">
+              </div>
+              <div class="details position-relative">
+                <div class="icon">
+                  <i class="fa-solid fa-file-video"></i>
+                </div>
+                <h3>Formatos</h3>
+                <p>Se almacena todos los formatos de video. Por ejemplo: MP4, AVI, etc.</p>
+              </div>
+            </div>
+          </div><!-- End Service Item -->
+        </div>
+        <div class="row gy-5 pb-5">
+          <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="200">
+            <div class="service-item">
+              <div class="img">
+                <img src="assets/img/services-4.jpg" class="img-fluid" alt="">
+              </div>
+              <div class="details position-relative">
+                <div class="icon">
+                  <i class="fa-solid fa-masks-theater"></i>
+                </div>
+                <h3>Generos</h3>
+                <p>Se almacena todos los generos de video. Por ejemplo: TERROR, ACCION, etc.</p>
+              </div>
+            </div>
+          </div><!-- End Service Item -->
+          <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="300">
+            <div class="service-item">
+              <div class="img">
+                <img src="assets/img/services-5.jpg" class="img-fluid" alt="">
+              </div>
+              <div class="details position-relative">
+                <div class="icon">
+                  <i class="fa-solid fa-language"></i>
+                </div>
+                <h3>Idiomas</h3>
+                <p>Se almacena todos los idiomas de video. Por ejemplo: INGLES, CASTELLANO, etc.</p>
+              </div>
+            </div>
+          </div><!-- End Service Item -->
+          <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="400">
+            <div class="service-item">
+              <div class="img">
+                <img src="assets/img/services-6.jpg" class="img-fluid" alt="">
+              </div>
+              <div class="details position-relative">
+                <div class="icon">
+                  <i class="fa-solid fa-building"></i>
+                </div>
+                <h3>Urbanizaciones</h3>
+                <p>Se almacena todos las urbanizaciones. Por ejemplo: QUINTANAS, TRUJILLO, etc.</p>
+              </div>
+            </div>
+          </div><!-- End Service Item -->
+        </div>
+        <div class="row gy-5 pb-5">
+          <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="200">
+            <div class="service-item">
+              <div class="img">
+                <img src="assets/img/services-4.jpg" class="img-fluid" alt="">
+              </div>
+              <div class="details position-relative">
+                <div class="icon">
+                  <i class="bi bi-person-badge"></i>
+                </div>
+                <h3>Clientes</h3>
+                <p>Se almacena todos los clientes relacionado a una urbanizacion</p>
+              </div>
+            </div>
+          </div><!-- End Service Item -->
+          <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="300">
+            <div class="service-item">
+              <div class="img">
+                <img src="assets/img/services-1.jpg" class="img-fluid" alt="">
+              </div>
+              <div class="details position-relative">
+                <div class="icon">
+                  <i class="fa-solid fa-video"></i>
+                </div>
+                <h3>Videos</h3>
+                <p>Se almacena todos los videos relacionado a un formato, varias idiomas y generos</p>
+              </div>
+            </div>
+          </div><!-- End Service Item -->
+          <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="400">
+            <div class="service-item">
+              <div class="img">
+                <img src="assets/img/services-5.jpg" class="img-fluid" alt="">
+              </div>
+              <div class="details position-relative">
+                <div class="icon">
+                  <i class="fa-solid fa-file"></i>
+                </div>
+                <h3>Fichas</h3>
+                <p>Se almacena todo el proceso del alquiler de video.</p>
+              </div>
+            </div>
+          </div><!-- End Service Item -->
+        </div>
+      </div>
+    </section><!-- End Services Section -->
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="footer-legal text-center">
+      <div class="container d-flex flex-column flex-lg-row justify-content-center justify-content-lg-between align-items-center">
+
+        <div class="d-flex flex-column align-items-center align-items-lg-start">
+          <div class="copyright">
+            &copy; Copyright <strong><span>GRUPO 03</span></strong>. All Rights Reserved
+          </div>
+        </div>
+
+        <div class="social-links order-first order-lg-last mb-3 mb-lg-0">
+          <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+          <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="google-plus"><i class="bi bi-skype"></i></a>
+          <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+        </div>
+
+      </div>
+    </div>
+
+  </footer><!-- End Footer -->
+  <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+</body>
+</html>

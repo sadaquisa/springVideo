@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="index :: head">
+</head>
+<meta charset="utf-8"/>
+<body>
+<div class="principal-container">
+		<div th:replace="dashboard :: navigation">
+		</div>
+		<div class="main">
+			<div th:replace="dashboard :: topbar">
+			</div>
+			<div class="content">
+				<h2 >LISTADO DE CLIENTES</h2>
+				<div class="space"></div>
+				<div class="row">
+					<div class="col-8">
+						<a class="btn-getstarted"  th:href="@{/cliente/create}"><i class="fa-solid fa-circle-plus"></i>&nbsp&nbsp&nbspNUEVO CLIENTE</a>
+					</div>
+					<div class="col-4" align="right">
+						<a class="btn btn-danger" th:href="@{/cliente/clientePDF}"><i class="fa-solid fa-file-pdf"></i></a>
+						<a class="btn btn-success" th:href="@{/cliente/clienteEXCEL}"><i class="fa-solid fa-file-excel"></i></a>
+					</div>
+				</div>
+				<div class="space"></div>
+				<form th:action="@{/cliente/list}" method="get">           
+	                 <div class="row">
+                 	 	<div class="col-3">
+                 	 		<input type="text" class="form-control" id="dni" name="dni" th:value="${dni}" placeholder="Buscar por dni ......" aria-describedby="button-addon2">
+                 	 	</div>
+                 	 	<div  class="col-3">                 	 	
+                 			<input type="text" class="form-control" id="buscarUrbanizacion" name="buscarUrbanizacion" th:value="${buscarUrbanizacion}" placeholder="Buscar por urbanizacion ......" aria-describedby="button-addon2">
+                   	 	</div>
+                   	 	<div  class="col-3">
+                   	 		<select class="form-control" name="sexoinput" id="sexoinput" >
+								<option value='' th:text='Ninguno'>				
+								<option value='Hombre' th:text='Hombre'>
+								<option value='Mujer' th:text='Mujer'>							
+							</select>            	 	
+                 			<!-- 
+                 			<input type="text" class="form-control"  id="sexoinput" name="sexoinput" th:value="${sexoinput}" placeholder="Buscar por genero ......" aria-describedby="button-addon2">
+                   	 		 -->
+                   	 	</div>
+                 	 	<div class="col-3">
+                 	 		<div class="input-group mb-3">							  
+							  <input type="text" class="form-control" id="nombres" name="nombres" th:value="${nombres}" placeholder="Buscar por nombres ......" aria-describedby="button-addon2">
+							  
+							  <div class="input-group-append">
+							    <button  class="btn btn-success"  type="submit" id="button-addon2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M14.53 15.59a8.25 8.25 0 111.06-1.06l5.69 5.69a.75.75 0 11-1.06 1.06l-5.69-5.69zM2.5 9.25a6.75 6.75 0 1111.74 4.547.746.746 0 00-.443.442A6.75 6.75 0 012.5 9.25z"></path></svg></button>
+							  </div>
+							</div>
+                   	 	</div>                  	 
+	                 </div>
+                 </form>
+				<div th:if="${cliente.size()==0}" class="alert alert-secondary" role="alert">
+					Aún no se registraron clientes
+				</div>
+				<div class="table-responsive-lg" th:if="${cliente.size()>0}">
+					<table class="table table-bordered" >
+						<thead>
+							<tr>
+								<th>DNI</th>
+								<th>NOMBRES</th>
+								<th>EDAD</th>
+								<th>GENERO</th>
+								<th>TELEFONO</th>
+								<th>DIRECCIÓN</th>
+								<th>FOTO</th>					
+								<th>ACCIONES</th>					
+							</tr>		
+						</thead> 
+						<tbody>
+							<tr th:each="item:${cliente}">
+								<td th:text="${item.dni}"></td>			
+								<td th:text="${item.nombres}"></td>
+								<td th:text="${item.edad}"></td>
+								<td th:text="${item.genero}"></td>
+								<td th:text="${item.telefono}"></td>
+								<td th:text="${item.direccion}"></td>
+								<td class="mytooltip" style="z-index: 0;">
+									<a style="z-index: 0;" th:href="@{'/foto_cliente/' + ${item.foto}}" th:alt=${item.foto} th:text="'IMG_'+${item.dni}" th:download="'IMG_'+${item.dni}+'.png'"></a>
+									<span class="tooltip-content" style="background-color: #D3D7DC; border: solid 10px #D3D7DC">
+			                            <img th:src="@{'/foto_cliente/' + ${item.foto}}">
+			                        </span>
+								</td>			
+								<td>
+									<form th:id="clienteDeleteForm+${item.id_cliente}" th:action="@{/cliente/delete/}+${item.id_cliente}" method="get">
+										<a class="btn btn btn btn-info btn-sm" th:href="@{/cliente/edit/} + ${item.id_cliente}"><i class="fa-solid fa-pen-to-square"></i></a>
+										<a class="btn btn-danger btn-sm" href="#" th:onclick="'confirmClienteDelete('+${item.id_cliente}+')'"><i class="fa-solid fa-trash-can"></i></a>										
+									</form>
+								</td>	
+							</tr>		
+						</tbody>	
+					</table>
+					<nav th:replace="paginator-nav :: paginator"></nav>	
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>	
+	<script>
+		
+		function confirmClienteDelete(id){
+			Swal.fire({
+			  title: 'CONFIRMACIÓN',
+			  text: "¿Desea eliminar este cliente?",
+			  icon: 'question',
+			  showCancelButton: true,
+			  confirmButtonColor: '#3085d6',
+			  cancelButtonColor: '#d33',
+			  confirmButtonText: 'SI',
+			  cancelButtonText: 'NO'
+			}).then((result) => {
+			  if (result.isConfirmed) {
+			    $('#clienteDeleteForm'+id).submit();
+				localStorage.setItem("confirmClienteDelete",true);
+			  }
+			})
+		}
+	
+		$(document).ready(function() {
+
+			$("#buscarUrbanizacion").autocomplete({
+
+				source : function(request, response) {
+					$.ajax({
+						url : "/urbanizacion/urbanizaciones/" + request.term,
+						dataType : "json",
+						data : {
+							term : request.term
+						},
+						success : function(data) {
+							response($.map(data, function(item) {
+								return {
+									value : item.urbanizacion,
+									label : item.urbanizacion,
+								};
+							}));
+						},
+					});
+				}		
+			});	
+
+		});
+	</script>
+	<script th:replace="dashboard :: script"></script>
+</body>
+</html>

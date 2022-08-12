@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="index :: head">
+</head>
+<meta charset="utf-8"/>
+<body>
+<div class="principal-container">
+		<div th:replace="dashboard :: navigation">
+		</div>
+		<div class="main">
+			<div th:replace="dashboard :: topbar">
+			</div>
+			<div class="content">
+				<h2 >LISTADO DE FICHAS</h2>
+				<div class="space"></div>
+				<a class="btn-getstarted"  th:href="@{/ficha/createFicha}"><i class="fa-solid fa-circle-plus"></i>&nbsp&nbsp&nbspNUEVA SOLICITUD</a>
+				<div class="space"></div>
+				<form id="formFECHAS" th:action="@{/ficha/listficha}" method="get">           
+	                 <div class="row">
+	                	<div  class="col-3">
+	                		<label for="codigo" >CLIENTE</label>          	             	 	
+                 			<input type="text" class="form-control" id="buscarClient" name="buscarClient" th:value="${buscarClient}" placeholder="Buscar por cliente ......" aria-describedby="button-addon2">
+                   	 	</div>
+	                 	<div  class="col-2">
+	                 		<label for="codigo" >ALQUILER INICIO</label>	                 	               	 	
+                 			<input type="date" class="form-control" id="fechaInicioA" name="fechaInicioA" th:value="${fechaInicioA}"  aria-describedby="button-addon2">
+                   	 	</div>
+                 	 	<div  class="col-2">
+                 	 		<label for="codigo" >ALQUILER FINAL</label>            	 	               	 	
+                 			<input type="date" class="form-control" id="fechaFinalA" name="fechaFinalA" th:value="${fechaFinalA}"  aria-describedby="button-addon2">
+                   	 	</div>
+                 	 	<div  class="col-2">
+                 	 		<label for="codigo" >EXPIRACION INICIO</label>
+                 	 		<input type="date" class="form-control" id="fechaInicio" name="fechaInicio" th:value="${fechaInicio}"  aria-describedby="button-addon2">
+                   	 	</div>
+                 	 	<div class="col-3">
+                 	 	    <label for="codigo" >EXPIRACION FINAL</label>          	 	
+                 	 		<div class="input-group mb-3">
+							  <input type="date" class="form-control" id="fechaFinal" name="fechaFinal" th:value="${fechaFinal}" aria-describedby="button-addon2">
+							  
+							  <div class="input-group-append">
+							    <a  onclick="validarFechas()" href="#" class="btn btn-success"   id="button-addon2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M14.53 15.59a8.25 8.25 0 111.06-1.06l5.69 5.69a.75.75 0 11-1.06 1.06l-5.69-5.69zM2.5 9.25a6.75 6.75 0 1111.74 4.547.746.746 0 00-.443.442A6.75 6.75 0 012.5 9.25z"></path></svg></a>
+							  </div>
+							</div>
+                   	 	</div>                  	 
+	                 </div>
+                 </form>
+                 <div class="space"></div>                 
+				<div th:if="${fichas.size()==0}" class="alert alert-secondary" role="alert">
+					No hay registros
+				</div>
+				<div class="table-responsive-lg" th:if="${fichas.size()>0}">
+					<table class="table table-bordered" >
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>CLIENTE</th>								
+								<th>COMENTARIO</th>
+								<th>VIDEOS</th>
+								<th>FECHA ALQUILER</th>
+								<th>FECHA EXPIRACION</th>
+								<th>TOTAL</th>
+								<th>ESTADO</th>												
+								<th>ACCIONES</th>						
+							</tr>		
+						</thead> 
+						<tbody>
+							<tr th:each="item:${fichas}">
+								<td th:text="${item.id_ficha}"></td>
+								<td th:text="${item.cliente.nombres}"></td>											
+								<td th:text="${item.comentario}"></td>
+								<td>
+									<div th:each="itemVideo:${item.listVideos}" th:text="${'- '+itemVideo.Video.titulo}"></div>	
+								</td>	
+								<td th:text="${item.fecha_alquiler}"></td>
+								<td th:text="${item.fecha_expiracion}"></td>
+								<td th:text="${item.total}"></td>
+								<td><div th:if="${item.estado=='0'}">
+									En espera
+								</div>
+								<div th:if="${item.estado=='1'}">
+									Denegado
+								</div>						
+								<div th:if="${item.estado=='3'}">
+									Pendiente de devolver
+								</div>
+								<div th:if="${item.estado=='4'}">
+									Entrega incompleta
+								</div>
+									<div th:if="${item.estado=='5'}">
+									Entrega completa
+								</div>
+								</td>						
+								<td>
+									<div th:if="${item.estado=='0'}">
+										<form th:id="fichaDeleteForm+${item.id_ficha}" th:action="@{/ficha/estadoDFicha/}+${item.id_ficha}" method="get">
+											<a class="btn btn-danger btn-sm" href="#" th:onclick="'confirmFichaDelete('+${item.id_ficha}+')'"><i class="fa-solid fa-trash-can"></i></a>								
+										</form>
+										<form th:id="fichaAceptarForm+${item.id_ficha}" th:action="@{/ficha/estadoAFicha/}+${item.id_ficha}" method="get">
+											<a class="btn btn-success btn-sm" href="#" th:onclick="'confirmFichaAceptar('+${item.id_ficha}+')'"><i class="fa-solid fa-check"></i></a>								
+										</form>
+									</div>
+									<a class="btn btn btn btn-info btn-sm" th:href="@{/ficha/verficha/} + ${item.id_ficha}"><i class="fa-solid fa-eye"></i></a>
+								</td>	
+							</tr>		
+						</tbody>	
+					</table>
+					<nav th:replace="paginator-nav :: paginator"></nav>	
+				</div>
+			</div>
+		</div>
+	</div>
+	<script th:replace="dashboard :: script"></script>
+	<script>		
+		function confirmFichaDelete(id){
+			Swal.fire({
+			  title: 'CONFIRMACIÓN',
+			  text: "¿Desea DENEGAR esta solicitud de alquiler?",
+			  icon: 'question',
+			  showCancelButton: true,
+			  confirmButtonColor: '#3085d6',
+			  cancelButtonColor: '#d33',
+			  confirmButtonText: 'SI',
+			  cancelButtonText: 'NO'
+			}).then((result) => {
+			  if (result.isConfirmed) {
+			    $('#fichaDeleteForm'+id).submit();
+				localStorage.setItem("confirmFichaDelete",true);
+			  }
+			})
+		}
+		
+		function confirmFichaAceptar(id){
+			Swal.fire({
+			  title: 'CONFIRMACIÓN',
+			  text: "¿Desea ACEPTAR esta solicitud de alquiler?",
+			  icon: 'question',
+			  showCancelButton: true,
+			  confirmButtonColor: '#3085d6',
+			  cancelButtonColor: '#d33',
+			  confirmButtonText: 'SI',
+			  cancelButtonText: 'NO'
+			}).then((result) => {
+			  if (result.isConfirmed) {
+			    $('#fichaAceptarForm'+id).submit();
+				localStorage.setItem("confirmFichaAceptar",true);
+			  }
+			})
+		}
+		function validarFechas(){
+			if(document.getElementById('fechaInicioA').value>document.getElementById('fechaFinalA').value){
+				Toast.fire({
+                    icon: 'error',
+                    title: 'La Fecha de Alquiler INICIAL debe ser menor a la FINAL'
+            	})
+			}else{ 
+				if(document.getElementById('fechaInicio').value>document.getElementById('fechaFinal').value){
+					Toast.fire({
+	                    icon: 'error',
+	                    title: 'La Fecha de Expiracion INICIAL debe ser menor a la FINAL'
+	            	})
+				}else{
+				    $('#formFECHAS').submit();
+				}
+			}
+		}
+		
+		$(document).ready(function() {
+
+			$("#buscarClient").autocomplete({
+
+				source : function(request, response) {
+					$.ajax({
+						url : "/cliente/clientes/" + request.term,
+						dataType : "json",
+						data : {
+							term : request.term
+						},
+						success : function(data) {
+							console.log("asasas",data);
+							response($.map(data, function(item) {
+								return {
+									value : item.nombres,
+									label : item.nombres,
+								};
+							}));
+						},
+					});
+				}		
+			});	
+
+		});
+		
+	</script>		
+</body>
+</html>

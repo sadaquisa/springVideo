@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="index :: head">
+</head>
+<meta charset="utf-8"/>
+<body>
+<div class="principal-container">
+		<div th:replace="dashboard :: navigation">
+		</div>
+		<div class="main">
+			<div th:replace="dashboard :: topbar">
+			</div>
+			<div class="content">
+				<h2>CREAR ROL</h2>
+				<div class="space"></div>
+				<form id="rolCreateForm" th:action="@{/rol/create}" th:object="${rol}"  method="post">
+					<div class="form-group">
+						<label for="codigo" >ROL</label>
+						<div>
+							<input class="form-control" type="text" name="rol" id="rol" th:field="*{rol}"
+									onkeypress="mayuscula(event)">			
+						</div>
+						<div class="error" th:if="${#fields.hasErrors('rol')}" th:errors="*{rol}"></div>			
+					</div>							
+					<div>			
+						<a class="btn btn-info" href="#" onclick="confirmRolCreate()"><i class="fa-solid fa-floppy-disk"></i> GUARDAR</a>
+						<a class="btn btn-dark" th:href="@{/rol/list}"><i class="fa-solid fa-arrow-rotate-left"></i> VOLVER</a>	
+					</div>	
+				</form>
+			</div>
+		</div>
+	</div>
+	<script th:replace="dashboard :: script"></script>
+	<script>		
+		function confirmRolCreate(){
+			Swal.fire({
+			  title: 'CONFIRMACIÓN',
+			  text: "¿Desea guardar este nuevo Rol?",
+			  icon: 'question',
+			  showCancelButton: true,
+			  confirmButtonColor: '#3085d6',
+			  cancelButtonColor: '#d33',
+			  confirmButtonText: 'SI',
+			  cancelButtonText: 'NO'
+			}).then((result) => {
+			  if (result.isConfirmed) {
+			    $('#rolCreateForm').submit();
+				localStorage.setItem("confirmRolCreate",true);
+			  }
+			})
+		}		
+	</script>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="index :: head">
+</head>
+<meta charset="utf-8"/>
+<body>
+	<div class="principal-container" th:if="${rol_autenticado=='ADMINISTRADOR' || rol_autenticado=='VENDEDOR' || rol_autenticado=='GERENTE'}">
+		<div th:replace="dashboard :: navigation">
+		</div>
+		<div class="main">
+			<div th:replace="dashboard :: topbar">
+			</div>
+			<div class="content">
+					<h2 th:text="'PERFIL DE '+${usuario.username} "></h2>
+					<div class="space"></div>
+					<form id="usuarioPerfilEditForm" th:action="@{/usuario/perfil_update/}+${usuario.id_usuario}" th:object="${usuario}"  method="post" enctype="multipart/form-data">
+						<div class="form-group">						
+							<div class="row">
+								<div class="col-8">										
+									<label for="codigo" >USERNAME</label>
+									<div>
+										<input disabled class="form-control" type="text" name="username" id="username" th:field="*{username}">			
+									</div>
+									<div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+									<label for="codigo" >EMAIL</label>
+									<div>
+										<input class="form-control" type="email" name="email" id="email" th:field="*{email}">			
+									</div>
+									<label for="codigo" >NOMBRES</label>
+									<div>
+										<input class="form-control" onkeypress="mayuscula(event)" type="text" name="nombres" id="nombres" th:field="*{nombres}">			
+									</div>
+									<div class="error" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>	
+									<label for="codigo" >PASSWORD</label>
+									<div>
+										<input class="form-control" type="password" name="password_inicial" id="password_inicial">			
+									</div>
+									<label for="codigo" >CONFIRMAR PASSWORD</label>
+									<div>
+										<input class="form-control" type="password" name="password_final" id="password_final">			
+									</div>													
+									<label for="codigo" >SELECCIONE FOTO</label>
+									<div>
+										<input type="file" accept=".jpeg,.jpg"  name="fotoinput" id="fotoinput"class="form-control"  onchange="Validar(this);"/>
+									</div>	
+								</div>
+								<div class="col-4" align="center">
+									<img id="imgfoto"  name="imgfoto" style="max-width: 100%;"  th:src="@{'/foto_cliente/' + *{foto}}" th:alt="*{foto}" />	
+								</div>		
+							</div>							
+						</div>									
+					<div>			
+							<a class="btn btn-info" href="#" onclick="confirmUsuarioPerfilEdit()"><i class="fa-solid fa-floppy-disk"></i> GUARDAR</a>
+							<a class="btn btn-dark" th:href="@{/dashboard}"><i class="fa-solid fa-arrow-rotate-left"></i> VOLVER</a>	
+						</div>	
+					</form>
+			</div>
+		</div>
+	</div>
+	<div class="principal-container" th:if="${rol_autenticado=='CLIENTE'}">
+		<div th:fragment="topbar_user" class="topbar">
+			<nav id="navbar" class="navbar">
+		        <ul>
+					<li><a class="nav-link scrollto"  th:href="@{/dashboard}">INICIO</a></li>
+		          <li><a class="nav-link scrollto"  th:href="@{/cliente/datoGenerales}">DATOS PERSONALES</a></li>
+		          <li><a class="nav-link scrollto" th:href="@{/ficha/list}">SOLICITUDES</a></li>
+		        </ul>
+		    </nav>
+			<span class="bottom-right" >
+				<div class="dropdown text-end">
+		          <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="padding: 5px;">
+		          	<img th:src="@{'/foto_cliente/' + ${usuario_autenticado.foto}}" th:alt=${usuario_autenticado.foto} width="32" height="32" class="rounded-circle" style="background-color: #0ea2bd; padding: 4px;">
+		            &nbsp<span th:text=${usuario_autenticado.username}></span>
+		          </a>
+		          <ul class="dropdown-menu" style="width: 250px;">
+		          	<li>
+		          		<div class="text-center">
+		          			<img th:src="@{'/foto_cliente/' + ${usuario_autenticado.foto}}" th:alt=${usuario_autenticado.foto} width="70" height="70" class="rounded-circle" style="background-color: #0ea2bd; padding: 4px; margin: 8px;">
+			          		<div class="text-center" style="font-size: 13px;" th:text="'NOMBRES: '+${usuario_autenticado.nombres}"></div>
+			          		<div class="text-center" style="font-size: 13px;" th:text="'ROL: '+${rol_autenticado}"></div>
+		          		</div>
+		          	</li>
+		            <li><hr class="dropdown-divider"></li>
+		            <li><a class="dropdown-item" th:href="@{/usuario/perfil}">PERFIL</a></li>
+		            <li><a class="dropdown-item" sec:authorize="isAuthenticated()" th:href="@{/logout}">LOGOUT</a></li>
+		          </ul>
+		        </div>			
+			</span>			
+		</div>
+		<div class="content">
+					<h3 th:text="'PERFIL DE '+${usuario.username} "></h3>
+					<div class="space"></div>
+					<form id="usuarioPerfilEditForm" th:action="@{/usuario/perfil_update/}+${usuario.id_usuario}" th:object="${usuario}"  method="post" enctype="multipart/form-data">
+						<div class="form-group">						
+							<div class="row">
+								<div class="col-8">										
+									<label for="codigo" >USERNAME</label>
+									<div>
+										<input disabled class="form-control" type="text" name="username" id="username" th:field="*{username}">			
+									</div>
+									<div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+									<label for="codigo" >EMAIL</label>
+									<div>
+										<input class="form-control" type="email" name="email" id="email" th:field="*{email}">			
+									</div>
+									<label for="codigo" >NOMBRES</label>
+									<div>
+										<input class="form-control" onkeypress="mayuscula(event)" type="text" name="nombres" id="nombres" th:field="*{nombres}">			
+									</div>
+									<div class="error" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>	
+									<label for="codigo" >PASSWORD</label>
+									<div>
+										<input class="form-control" type="password" name="password_inicial" id="password_inicial">			
+									</div>
+									<label for="codigo" >CONFIRMAR PASSWORD</label>
+									<div>
+										<input class="form-control" type="password" name="password_final" id="password_final">			
+									</div>													
+									<label for="codigo" >SELECCIONE FOTO</label>
+									<div>
+										<input type="file" accept=".jpeg,.jpg"  name="fotoinput" id="fotoinput"class="form-control"  onchange="Validar(this);"/>
+									</div>	
+								</div>
+								<div class="col">
+								</div>
+								<div class="col-3" align="center">
+									<img id="imgfoto"  name="imgfoto" style="width: 100%; height:420px; background-color: #D3D7DC"  th:src="@{'/foto_cliente/' + *{foto}}" th:alt="*{foto}" />	
+								</div>		
+							</div>							
+						</div>									
+					<div>			
+							<a class="btn btn-info" href="#" onclick="confirmUsuarioPerfilEdit()"><i class="fa-solid fa-floppy-disk"></i> GUARDAR</a>
+							<a class="btn btn-dark" th:href="@{/dashboard}"><i class="fa-solid fa-arrow-rotate-left"></i> VOLVER</a>	
+						</div>	
+					</form>
+			</div>
+	</div>
+	<script th:replace="dashboard :: script"></script>	
+	<script>
+		function confirmUsuarioPerfilEdit(){
+			Swal.fire({
+			  title: 'CONFIRMACIÓN',
+			  text: "¿Desea guardar los cambios de su perfil?",
+			  icon: 'question',
+			  showCancelButton: true,
+			  confirmButtonColor: '#3085d6',
+			  cancelButtonColor: '#d33',
+			  confirmButtonText: 'SI',
+			  cancelButtonText: 'NO'
+			}).then((result) => {
+			  if (result.isConfirmed) {
+				  
+				  if(document.getElementById("password_final").value!=document.getElementById("password_inicial").value){
+					  Toast.fire({
+		                    icon: 'error',
+		                    title: 'La contraseña no coincide'
+		            	})
+				  }else{
+					  Toast.fire({
+		                    icon: 'success',
+		                    title: 'Perfil editado correctamente'
+		               })
+					   $('#usuarioPerfilEditForm').submit();
+					   
+				  }				 
+			  }
+			})
+		}
+        function Validar(obj)
+	    {
+	        var uploadFile = obj.files[0];
+	        if (!(/\.(jpg|jpeg)$/i).test(uploadFile.name)) {
+	            Toast.fire({
+	                    icon: 'error',
+	                    title: 'El archivo a adjuntar no es una imagen de tipo jpg o jpeg'
+	            })
+	            $('#fotoinput').val("");
+	            document.getElementById("imgfoto").style.display = "none";
+	        }else{
+	            var img = new Image();
+	            Toast.fire({
+                    icon: 'success',
+                    title: 'Correctamente adjuntado'
+                })                                       
+                document.getElementById("imgfoto").style.display = "block";                 
+	        }     
+	        img.src = URL.createObjectURL(uploadFile);
+	    } 
+	    function readURL(input) {
+	        if (input.files && input.files[0]) { //Revisamos que el input tenga contenido
+	            var reader = new FileReader(); //Leemos el contenido
+	            
+	            reader.onload = function(e) { //Al cargar el contenido lo pasamos como atributo de la imagen de arriba
+	                //document.getElementById("imgfirma").style.display = "block";
+	                $('#imgfoto').attr('src', e.target.result);
+	            }
+	            
+	            reader.readAsDataURL(input.files[0]);
+	        }
+	    }
+	   
+	    $("#fotoinput").change(function() { //Cuando el input cambie (se cargue un nuevo archivo) se va a ejecutar de nuevo el cambio de imagen y se verá reflejado.
+		    readURL(this);		    	
+	    });         
+	
+	</script>
+</body>
+
+</html>

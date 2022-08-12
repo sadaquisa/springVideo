@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="index :: head">
+</head>
+<meta charset="utf-8"/>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<body>
+	<div class="principal-container">
+		<div th:replace="dashboard :: navigation">
+		</div>
+		<div class="main">
+			<div th:replace="dashboard :: topbar">
+			</div>
+			<div class="content">
+				<div class="title" align="center"> 
+		          	<h2>REPORTE DE VIDEOS</h2>
+		         </div>
+				<div class="space"></div>
+				<div class="row">
+					<div class="col-6">
+						<figure class="highcharts-figure">
+						    <div id="container"></div>
+						</figure>      
+					</div>
+					<div class="col-6">
+						<figure class="highcharts-figure">
+						    <div id="container1"></div>
+						</figure> 
+					</div>		
+				</div>
+				<div class="row">
+					<div class="col-6">
+						<figure class="highcharts-figure">
+						    <div id="container2"></div>
+						</figure>      
+					</div>
+					<div class="col-6">
+						<figure class="highcharts-figure">
+						     <div id="pie"></div>					    			    				  
+						</figure> 
+					</div>		
+				</div>				
+			</div>
+		</div>
+	</div>
+	<script th:replace="dashboard :: script"></script>
+
+	<script th:inline="javascript">		
+		$(function(){
+		    Highcharts.chart('container', {
+		        chart: {
+		            type: 'column'
+		        },
+		        title: {
+		            text: 'CANTIDAD DE ALQUILERES POR VIDEOS'
+		        },
+		        subtitle: {
+		            text: '2022'
+		        },
+		        xAxis: {
+		            categories: [[${keySet}]],
+		            crosshair: true
+		        },
+		        yAxis: {
+		            min: 0,
+		            max:[[${cantidadVideos}]],
+		            title: {
+		                text: 'Cantidad'
+		            }
+		        },
+		        tooltip: {
+		            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+		            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+		            '<td style="padding:0"><b>{point.y:f}</b></td></tr>',
+		            footerFormat: '</table>',
+		            shared: true,
+		            useHTML: true
+		        },
+		        plotOptions: {
+		            column: {
+		                pointPadding: 0.2,
+		                borderWidth: 0
+		            }
+		        },
+		        series: [{
+		            name: 'Titulo',
+		            data: [[${values}]]
+		        }]
+		      });
+		  });
+		
+		$(function(){
+		    Highcharts.chart('container1', {
+		        chart: {
+		            type: 'line'
+		        },
+		        title: {
+		            text: 'CANTIDAD DE ALQUILERES POR MES'
+		        },
+		        subtitle: {
+		            text: '2022'
+		        },
+		        xAxis: {
+		            categories: [[${keySet1}]],
+		            crosshair: true
+		        },
+		        yAxis: {
+		            min: 0,
+		            max: [[${cantidadVideosMes}]],
+		            title: {
+		                text: 'Cantidad'
+		            }
+		        },
+		        tooltip: {
+		            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+		            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+		            '<td style="padding:0"><b>{point.y:f}</b></td></tr>',
+		            footerFormat: '</table>',
+		            shared: true,
+		            useHTML: true
+		        },
+		        plotOptions: {
+		            column: {
+		                pointPadding: 0.2,
+		                borderWidth: 0
+		            }
+		        },
+		        series: [{
+		            name: 'Mes',
+		            data: [[${values1}]]
+		        }]
+		      });
+		  });
+		
+		$(function(){
+		    Highcharts.chart('container2', {
+		        chart: {
+		            type: 'column'
+		        },
+		        title: {
+		            text: 'CANTIDAD DE ALQUILERES POR AÑO'
+		        },
+		        subtitle: {
+		            text: '2022'
+		        },
+		        xAxis: {
+		            categories: [[${keySet2}]],
+		            crosshair: true
+		        },
+		        yAxis: {
+		            min: 0,
+		            max:[[${cantidadVideosYear}]],
+		            title: {
+		                text: 'Cantidad'
+		            }
+		        },
+		        tooltip: {
+		            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+		            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+		            '<td style="padding:0"><b>{point.y:f}</b></td></tr>',
+		            footerFormat: '</table>',
+		            shared: true,
+		            useHTML: true
+		        },
+		        plotOptions: {
+		            column: {
+		                pointPadding: 0.2,
+		                borderWidth: 0
+		            }
+		        },
+		        series: [{
+		            name: 'Año',
+		            data: [[${values2}]]
+		        }]
+		      });
+		  });
+		
+		
+		$(function(){
+			Highcharts.chart('pie', {
+				chart : {
+					type : 'pie',
+					options3d : {
+						enabled : true,
+						alpha : 50,
+						beta : 0
+					}
+				},
+				title : {
+					text : 'GRAFICO DE LOS ESTADOS DE LOS VIDEOS'
+				},
+				tooltip : {
+					pointFormat : '{series.name}: <b>{point.percentage:.1f}%</b>'
+				},
+				plotOptions : {
+					pie : {
+						allowPointSelect : true,
+						cursor : 'pointer',
+						depth : 35,
+						dataLabels : {
+							enabled : true,
+							format : '{point.name}'
+						}
+					}
+				},
+				series : [ {
+					type : 'pie',
+					name : 'Ratio',
+					data : [ [ 'En espera', [[${enespera}]] ], [ 'Denegado', [[${denegado}]] ] ,
+						[ 'Anulado', [[${anulado}]] ] , [ 'Pendiente a devolver', [[${pendiente}]] ],
+							[ 'Devuelto a tiempo', [[${devueltotiempo}]] ],[ 'Devuelto a destiempo', [[${devueltodestiempo}]] ]]
+				} ]
+			});
+			              
+		  });	
+		
+		
+	</script>
+	
+</body>
+</html>

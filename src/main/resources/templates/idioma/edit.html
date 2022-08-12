@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="index :: head">
+</head>
+<meta charset="utf-8"/>
+<body>
+<div class="principal-container">
+		<div th:replace="dashboard :: navigation">
+		</div>
+		<div class="main">
+			<div th:replace="dashboard :: topbar">
+			</div>
+			<div class="content">
+					<h2>EDITAR IDIOMA</h2>
+					<div class="space"></div>
+					<form id="idiomaEditForm" th:action="@{/idioma/update/}+${id}" th:object="${idioma}"  method="post">
+						<div class="form-group">
+							<label for="codigo" >IDIOMA</label>
+							<div>
+								<input class="form-control" type="text" name="idioma" onKeyUp="this.value=this.value.toUpperCase();"  id="idioma" th:field="*{idioma}">			
+							</div>
+							<div class="error" th:if="${#fields.hasErrors('idioma')}" th:errors="*{idioma}"></div>			
+						</div>							
+						<div>			
+							<a class="btn btn-info" href="#" onclick="confirmIdiomaEdit()"><i class="fa-solid fa-floppy-disk"></i> GUARDAR</a>
+							<a class="btn btn-dark" th:href="@{/idioma/list}"><i class="fa-solid fa-arrow-rotate-left"></i> VOLVER</a>	
+						</div>	
+					</form>
+				</div>
+		</div>
+	</div>
+	<script th:replace="dashboard :: script"></script>
+	<script>		
+		function confirmIdiomaEdit(){
+			Swal.fire({
+			  title: 'CONFIRMACIÓN',
+			  text: "¿Desea guardar los cambios en este idioma?",
+			  icon: 'question',
+			  showCancelButton: true,
+			  confirmButtonColor: '#3085d6',
+			  cancelButtonColor: '#d33',
+			  confirmButtonText: 'SI',
+			  cancelButtonText: 'NO'
+			}).then((result) => {
+			  if (result.isConfirmed) {
+			    $('#idiomaEditForm').submit();
+				localStorage.setItem("confirmIdiomaEdit",true);
+			  }
+			})
+		}
+	</script>
+</body>
+</html>

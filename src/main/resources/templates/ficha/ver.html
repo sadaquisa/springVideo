@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="index :: head">
+</head>
+<meta charset="utf-8"/>
+<body>
+	<div class="principal-container">
+			<div th:replace="dashboard :: topbar_user"></div>
+			<div class="content">
+				<h2>VISTA DE VIDEOS ALQUILADOS</h2>
+				<div class="space"></div>
+				<form id="videoFichaVerForm" 
+					th:object="${ficha}" method="post" enctype="multipart/form-data">
+					<div class="form-group">
+						<div class="row">							
+							<div class="col-6">
+								<label for="codigo">FECHA DE EXPIRACION</label>
+								<div>
+									<input class="form-control" type="text" disabled name="fecha_expiracion"
+										id="fecha_expiracion" th:field="*{fecha_expiracion}">
+								</div>												
+							</div>
+							<div class="col-6">
+								<label for="codigo">COMENTARIO</label>
+								<div>
+									<input class="form-control" type="text" disabled name="comentario"
+										id="comentario" th:field="*{comentario}">
+								</div>	
+							</div>
+						</div>
+					</div>					
+					<br>
+					<div class="row">
+						<div class="col-12" align="center">
+							<div class="table-responsive-lg">
+								<table class="table table-bordered" id="detalle">
+									<thead>
+										<tr>
+											<th>TITULO</th>
+											<th>DIAS DE ALQUILER</th>
+											<th>PRECIO</th>
+											<th>MORA</th>											
+											<th>SUBTOTAL</th>
+											<th>FECHA DE ENTREGA</th>											
+											<th>ESTADO</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="item:${ficha.ListVideos}">
+											<td th:text="${item.video.titulo}"></td>											
+											<td th:text="${item.cantidad}"></td>
+											<td th:text="${item.costo}"></td>
+											<td th:text="${item.mora}"></td>							
+											<td th:text="${item.subtotal}"></td>											
+											<td>
+												<div th:if="${item.fecha_entrega==null}">
+												 	-
+												</div>
+												<div th:if="${item.fecha_entrega!=null}">
+												 	<div th:text="${item.fecha_entrega}"></div>
+												</div>
+											</td>
+											<td><div th:if="${item.estado=='0'}">
+													En espera
+												</div>											
+												<div th:if="${item.estado=='1'}">
+													Denegado
+												</div>
+												<div th:if="${item.estado=='2'}">
+													Anulado
+												</div>
+												<div th:if="${item.estado=='3'}">
+													Pendiente de devolver
+												</div>
+												<div th:if="${item.estado=='4'}">
+													Devuelto a tiempo
+												</div>
+												<div th:if="${item.estado=='5'}">
+													Devuelto a destiempo
+												</div>													
+											</td>								
+										</tr>		
+									</tbody>	
+								</table>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-10"></div>
+						<div class="col-2">
+							<label>TOTAL: </label>  <label th:text=${ficha.total}></label>					
+						</div>
+					</div>
+					<div class="space"></div>					
+					<div>
+						 <a class="btn btn-dark" th:href="@{/ficha/list}"><i
+							class="fa-solid fa-arrow-rotate-left"></i> VOLVER</a>
+					</div>
+				</form>							
+			</div>
+	</div>
+	<script th:replace="dashboard :: script"></script>
+	<script src="http://momentjs.com/downloads/moment.min.js"></script>	
+</body>
+
+</html>

@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+	 xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="index :: head">
+<meta charset="utf-8"/>
+<body>
+	<div class="principal-container" th:if="${rol_autenticado=='ADMINISTRADOR' || rol_autenticado=='VENDEDOR' || rol_autenticado=='GERENTE'}">
+		<div th:fragment="navigation" class="navigation">
+			<ul>
+				<li align="center">
+					<a th:href="@{/dashboard}">
+						<span class="icon"><i class="fa-solid fa-laptop-code"></i></span>
+						<span class="title">DASHBOARD</span>						
+					</a>
+				</li>
+				<li class="datosgenerales" th:if="${rol_autenticado=='CLIENTE'}">
+					<a th:href="@{/cliente/datoGenerales}">
+						<span class="icon"><i class="fa-solid fa-file"></i></span>
+						<span class="title">D. PERSONALES</span>
+					</a>
+				</li>
+				<li class="listficha" th:if="${rol_autenticado=='VENDEDOR'}">
+					<a th:href="@{/ficha/listficha}">
+						<span class="icon"><i class="bi bi-person-badge"></i></span>
+						<span class="title">FICHAS</span>
+					</a>
+				</li>
+				<li class="rol" th:if="${rol_autenticado=='ADMINISTRADOR'}">
+					<a th:href="@{/rol/list}">
+						<span class="icon"><i class="bi bi-tag-fill"></i></span>
+						<span class="title">ROLES</span>
+					</a>
+				</li>
+				<li class="usuario" th:if="${rol_autenticado=='ADMINISTRADOR'}">
+					<a th:href="@{/usuario/list}">
+						<span class="icon"><i class="fa-solid fa-user"></i></span>
+						<span class="title">USUARIOS</span>
+					</a>
+				</li>
+				<li class="formato" th:if="${rol_autenticado=='ADMINISTRADOR'}">
+					<a th:href="@{/formato/list}">
+						<span class="icon"><i class="fa-solid fa-file-video"></i></span>
+						<span class="title">FORMATOS</span>
+					</a>
+				</li>
+				<li class="genero" th:if="${rol_autenticado=='ADMINISTRADOR'}">
+					<a th:href="@{/genero/list}">
+						<span class="icon"><i class="fa-solid fa-masks-theater"></i></span>
+						<span class="title">GENEROS</span>
+					</a>
+				</li>
+				<li class="idioma" th:if="${rol_autenticado=='ADMINISTRADOR'}">
+					<a th:href="@{/idioma/list}">
+						<span class="icon"><i class="fa-solid fa-language"></i></span>
+						<span class="title">IDIOMAS</span>
+					</a>
+				</li>
+				<li class="urbanizacion" th:if="${rol_autenticado=='ADMINISTRADOR'}">
+					<a th:href="@{/urbanizacion/list}">
+						<span class="icon"><i class="fa-solid fa-building"></i></span>
+						<span class="title">URBANIZACIONES</span>
+					</a>
+				</li>
+				<li class="cliente" th:if="${rol_autenticado=='ADMINISTRADOR'}">
+					<a th:href="@{/cliente/list}">
+						<span class="icon"><i class="bi bi-person-badge"></i></span>
+						<span class="title">CLIENTES</span>
+					</a>
+				</li>
+				<li class="video" th:if="${rol_autenticado=='ADMINISTRADOR'}">
+					<a th:href="@{/video/list}">
+						<span class="icon"><i class="fa-solid fa-video"></i></span>
+						<span class="title">VIDEOS</span>
+					</a>
+				</li>
+				<li class="ficha" th:if="${rol_autenticado=='CLIENTE'}">
+					<a th:href="@{/ficha/list}">
+						<span class="icon"><i class="fa-solid fa-file"></i></span>
+						<span class="title">FICHAS</span>
+					</a>
+				</li>
+				<li class="videoGerente" th:if="${rol_autenticado=='GERENTE'}">
+					<a th:href="@{/video/listvideos}">
+						<span class="icon"><i class="fa-solid fa-file"></i></span>
+						<span class="title">FICHAS</span>
+					</a>
+				</li>
+				<li class="reportevideocantidad" th:if="${rol_autenticado=='GERENTE'}">
+					<a th:href="@{/reporte/videocantidad}">
+						<span class="icon"><i class="fa-solid fa-chart-pie"></i></span>
+						<span class="title">REPORTES</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="main">
+			<div th:fragment="topbar" class="topbar">
+				<div class="toggle">
+					<i class="fa-solid fa-bars"></i>
+				</div>
+				<span class="bottom-right" >
+					<div class="dropdown text-end">
+			          <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="padding: 5px;">
+			          	<img th:src="@{'/foto_cliente/' + ${usuario_autenticado.foto}}" th:alt=${usuario_autenticado.foto} width="32" height="32" class="rounded-circle" style="background-color: #0ea2bd; padding: 4px;">
+			            &nbsp<span th:text=${usuario_autenticado.username}></span>
+			          </a>
+			          <ul class="dropdown-menu" style="width: 250px;">
+			          	<li>
+			          		<div class="text-center">
+			          			<img th:src="@{'/foto_cliente/' + ${usuario_autenticado.foto}}" th:alt=${usuario_autenticado.foto} width="70" height="70" class="rounded-circle" style="background-color: #0ea2bd; padding: 4px; margin: 8px;">
+				          		<div class="text-center" style="font-size: 13px;" th:text="'NOMBRES: '+${usuario_autenticado.nombres}"></div>
+				          		<div class="text-center" style="font-size: 13px;" th:text="'ROL: '+${rol_autenticado}"></div>
+			          		</div>
+			          	</li>
+			            <li><hr class="dropdown-divider"></li>
+			            <li><a class="dropdown-item" th:href="@{/usuario/perfil}">PERFIL</a></li>
+			            <li><a class="dropdown-item" sec:authorize="isAuthenticated()" th:href="@{/logout}">LOGOUT</a></li>
+			          </ul>
+			        </div>			
+				</span>			
+			</div>
+			<div class="content background">
+			</div>
+		</div>
+	</div>
+	<div class="principal-container" th:if="${rol_autenticado=='CLIENTE'}">
+		<div th:fragment="topbar_user" class="topbar">
+			<nav id="navbar" class="navbar">
+		        <ul>
+		        	<li><a class="nav-link scrollto"  th:href="@{/dashboard}">INICIO</a></li>
+		          	<li><a class="nav-link scrollto"  th:href="@{/cliente/datoGenerales}">DATOS PERSONALES</a></li>
+		          	<li><a class="nav-link scrollto" th:href="@{/ficha/list}">SOLICITUDES</a></li>
+		        </ul>
+		    </nav>
+			<span class="bottom-right" >
+				<div class="dropdown text-end">
+		          <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="padding: 5px;">
+		          	<img th:src="@{'/foto_cliente/' + ${usuario_autenticado.foto}}" th:alt=${usuario_autenticado.foto} width="32" height="32" class="rounded-circle" style="background-color: #0ea2bd; padding: 4px;">
+		            &nbsp<span th:text=${usuario_autenticado.username}></span>
+		          </a>
+		          <ul class="dropdown-menu" style="width: 250px;">
+		          	<li>
+		          		<div class="text-center">
+		          			<img th:src="@{'/foto_cliente/' + ${usuario_autenticado.foto}}" th:alt=${usuario_autenticado.foto} width="70" height="70" class="rounded-circle" style="background-color: #0ea2bd; padding: 4px; margin: 8px;">
+			          		<div class="text-center" style="font-size: 13px;" th:text="'NOMBRES: '+${usuario_autenticado.nombres}"></div>
+			          		<div class="text-center" style="font-size: 13px;" th:text="'ROL: '+${rol_autenticado}"></div>
+		          		</div>
+		          	</li>
+		            <li><hr class="dropdown-divider"></li>
+		            <li><a class="dropdown-item" th:href="@{/usuario/perfil}">PERFIL</a></li>
+		            <li><a class="dropdown-item" sec:authorize="isAuthenticated()" th:href="@{/logout}">LOGOUT</a></li>
+		          </ul>
+		        </div>			
+			</span>			
+		</div>
+		<div class="row" style="margin: 10px;">
+			<div class="col-12">
+				<h3>LAS 10 PELÍCULAS MAS POPULARES HOY</h3>
+				<div class="MultiCarousel" data-items="1,3,5,6" data-slide="1" id="MultiCarousel"  data-interval="1000">
+		            <div class="MultiCarousel-inner">
+			            <div class="item flip-card-container" th:each="item:${top10videos}">
+							<div class="item flip-card">
+							    <div class="card-front">
+							        <img th:src="@{'/foto_video/' + ${item.portada}}" th:alt=${item.portada} width="100%">
+							    </div>
+							    <div class="card-back">
+							      <figure class="slide">
+							        <div class="img-bg"></div>
+							        <img th:src="@{'/foto_video/' + ${item.portada}}" th:alt=${item.portada} width="100%">
+							      </figure>
+							      <ul class="slide" style="background-color: rgba(0, 0, 0, 0.9);">
+							        <li class="slide" style="font-weight: bold;" th:text="'TOP ' + ${top + top10videos.indexOf(item)}"></li>
+							        <li class="slide" th:text=${item.titulo}></li>
+							      </ul>
+							    </div>
+							</div>
+						</div>
+		            </div>
+		            <button class="btn btn-primary leftLst"><</button>
+		            <button class="btn btn-primary rightLst">></button>
+		        </div>
+		    </div>
+		</div>
+		<br>
+		<div class="row" style="margin: 10px;">
+		    <div class="col-12">
+		    	<h3>PELICULAS DE ACCIÓN </h3>
+				<div class="MultiCarousel" data-items="1,3,5,6" data-slide="1" id="MultiCarousel"  data-interval="1000">
+					<div class="MultiCarousel-inner">
+			            <div class="flip-card-container item" th:each="item:${listGeneroAccion}">
+							<div class="flip-card item">
+							    <div class="card-front">
+							        <img th:src="@{'/foto_video/' + ${item.portada}}" th:alt=${item.portada} width="100%">
+							    </div>
+							    <div class="card-back">
+							      <figure class="slide">
+							        <div class="img-bg"></div>
+							        <img th:src="@{'/foto_video/' + ${item.portada}}" th:alt=${item.portada} width="100%">
+							      </figure>
+							      <ul class="slide" style="background-color: rgba(0, 0, 0, 0.9);">
+							        <li class="slide" style="font-weight: bold;" th:text=${item.titulo}></li>
+							      </ul>
+							    </div>
+							</div>
+						</div>
+	            	</div>
+	            	<button class="btn btn-primary leftLst"><</button>
+		            <button class="btn btn-primary rightLst">></button>
+	            </div>
+		    </div>
+		</div>
+		<br>
+		<div class="row" style="margin: 10px;">
+		    <div class="col-12">
+				<h3>PELICULAS DE CIENCIA FICCIÓN </h3>
+				<div class="MultiCarousel" data-items="1,3,5,6" data-slide="1" id="MultiCarousel"  data-interval="1000">
+					<div class="MultiCarousel-inner">
+			            <div class="flip-card-container item" th:each="item:${listGeneroCiencia}">
+							<div class="flip-card item">
+							    <div class="card-front">
+							        <img th:src="@{'/foto_video/' + ${item.portada}}" th:alt=${item.portada} width="100%">
+							    </div>
+							    <div class="card-back">
+							      <figure class="slide">
+							        <div class="img-bg"></div>
+							        <img th:src="@{'/foto_video/' + ${item.portada}}" th:alt=${item.portada} width="100%">
+							      </figure>
+							      <ul class="slide" style="background-color: rgba(0, 0, 0, 0.9);">
+							        <li class="slide" style="font-weight: bold;" th:text=${item.titulo}></li>
+							      </ul>
+							    </div>
+							</div>
+						</div>
+	            	</div>
+	            	<button class="btn btn-primary leftLst"><</button>
+		            <button class="btn btn-primary rightLst">></button>
+	            </div>
+		    </div>
+		</div>
+		<br>
+		<div class="row" style="margin: 10px;">
+		    <div class="col-12">
+				<h3>PELICULAS DE TERROR </h3>
+				<div class="MultiCarousel" data-items="1,3,5,6" data-slide="1" id="MultiCarousel"  data-interval="1000">
+					<div class="MultiCarousel-inner">
+			            <div class="flip-card-container item" th:each="item:${listGeneroTerror}">
+							<div class="flip-card item">
+							    <div class="card-front">
+							        <img th:src="@{'/foto_video/' + ${item.portada}}" th:alt=${item.portada} width="100%">
+							    </div>
+							    <div class="card-back">
+							      <figure class="slide">
+							        <div class="img-bg"></div>
+							        <img th:src="@{'/foto_video/' + ${item.portada}}" th:alt=${item.portada} width="100%">
+							      </figure>
+							      <ul class="slide" style="background-color: rgba(0, 0, 0, 0.9);">
+							        <li class="slide" style="font-weight: bold;" th:text=${item.titulo}></li>
+							      </ul>
+							    </div>
+							</div>
+						</div>
+	            	</div>
+	            	<button class="btn btn-primary leftLst"><</button>
+		            <button class="btn btn-primary rightLst">></button>
+	            </div>
+		    </div>
+		</div>
+		<br>
+		<div class="row" style="margin: 10px;">
+		    <div class="col-12">
+				<h3>PARA LOS AMANTES DEL DEPORTE </h3>
+				<div class="MultiCarousel" data-items="1,3,5,6" data-slide="1" id="MultiCarousel"  data-interval="1000">
+					<div class="MultiCarousel-inner">
+			            <div class="flip-card-container item" th:each="item:${listGeneroDeporte}">
+							<div class="flip-card item">
+							    <div class="card-front">
+							        <img th:src="@{'/foto_video/' + ${item.portada}}" th:alt=${item.portada} width="100%">
+							    </div>
+							    <div class="card-back">
+							      <figure class="slide">
+							        <div class="img-bg"></div>
+							        <img th:src="@{'/foto_video/' + ${item.portada}}" th:alt=${item.portada} width="100%">
+							      </figure>
+							      <ul class="slide" style="background-color: rgba(0, 0, 0, 0.9);">
+							        <li class="slide" style="font-weight: bold;" th:text=${item.titulo}></li>
+							      </ul>
+							    </div>
+							</div>
+						</div>
+	            	</div>
+	            	<button class="btn btn-primary leftLst"><</button>
+		            <button class="btn btn-primary rightLst">></button>
+	            </div>
+		    </div>
+	    </div>
+	    <br>
+	    <div class="row" style="margin: 10px;">
+		    <div class="col-12">
+				<h3>PARA LOS PEQUEÑOS DE CASA</h3>
+				<div class="MultiCarousel" data-items="1,3,5,6" data-slide="1" id="MultiCarousel"  data-interval="1000">
+					<div class="MultiCarousel-inner">
+			            <div class="flip-card-container item" th:each="item:${listGeneroAnimacion}">
+							<div class="flip-card item">
+							    <div class="card-front">
+							        <img th:src="@{'/foto_video/' + ${item.portada}}" th:alt=${item.portada} width="100%">
+							    </div>
+							    <div class="card-back">
+							      <figure class="slide">
+							        <div class="img-bg"></div>
+							        <img th:src="@{'/foto_video/' + ${item.portada}}" th:alt=${item.portada} width="100%">
+							      </figure>
+							      <ul class="slide" style="background-color: rgba(0, 0, 0, 0.9);">
+							        <li class="slide" style="font-weight: bold;" th:text=${item.titulo}></li>
+							      </ul>
+							    </div>
+							</div>
+						</div>
+	            	</div>
+	            	<button class="btn btn-primary leftLst"><</button>
+		            <button class="btn btn-primary rightLst">></button>
+	            </div>
+		    </div>
+	    </div>
+	</div>
+	<script th:fragment="script">	
+		const Toast = Swal.mixin({
+		  toast: true,
+		  position: 'bottom-end',
+		  showConfirmButton: false,
+		  timer: 3000,
+		  timerProgressBar: true,
+		  didOpen: (toast) => {
+		    toast.addEventListener('mouseenter', Swal.stopTimer)
+		    toast.addEventListener('mouseleave', Swal.resumeTimer)
+		  }
+		}) 
+		
+		function mensajeToast(icon,titulo){
+			Toast.fire({
+                icon: icon,
+                title: titulo
+            })
+		}
+		 function mayuscula(e){
+			 console.log(e.keyCode);
+             if (((e.keyCode <=91 && e.keyCode >= 65) || e.keyCode==32)) {
+                 return true;
+             } else {
+                 e.preventDefault();
+             }
+         }		
+	    
+		let toggle = document.querySelector('.toggle');
+		let navigation = document.querySelector('.navigation');
+		let main = document.querySelector('.main');
+		
+		toggle.onclick = function(){
+			navigation.classList.toggle('active');
+			main.classList.toggle('active');
+		}
+		
+		
+		let reportevideocantidad = document.querySelector('.reportevideocantidad');
+		let datosgenerales = document.querySelector('.datosgenerales');
+		let videoGerente = document.querySelector('.videoGerente');
+		let rol = document.querySelector('.rol');
+		let usuario = document.querySelector('.usuario');
+		let formato = document.querySelector('.formato');
+		let genero = document.querySelector('.genero');
+		let idioma = document.querySelector('.idioma');
+		let urbanizacion = document.querySelector('.urbanizacion');
+		let cliente = document.querySelector('.cliente');
+		let video = document.querySelector('.video');
+		let ficha = document.querySelector('.ficha');
+		let listficha = document.querySelector('.listficha');
+
+
+		
+		 window.onload=function(){
+			if(window.location.href.indexOf("rol")!="-1"){
+				rol.classList.add('hovered');
+			}
+			else if(window.location.href.indexOf("usuario/list")!="-1"){
+				usuario.classList.add('hovered');
+			}
+			else if(window.location.href.indexOf("formato")!="-1"){
+				formato.classList.add('hovered');
+			}else if(window.location.href.indexOf("genero")!="-1"){
+				genero.classList.add('hovered');
+			}else if(window.location.href.indexOf("idioma")!="-1"){
+				idioma.classList.add('hovered');
+			}else if(window.location.href.indexOf("urbanizacion")!="-1"){
+				urbanizacion.classList.add('hovered');
+			}else if(window.location.href.indexOf("cliente/datoGenerales")!="-1"){
+				datosgenerales.classList.add('hovered');
+			}else if(window.location.href.indexOf("video/listvideos")!="-1"){
+				videoGerente.classList.add('hovered');
+			}else if(window.location.href.indexOf("ficha/listficha")!="-1"){
+				listficha.classList.add('hovered');
+			}else if(window.location.href.indexOf("cliente")!="-1"){
+				cliente.classList.add('hovered');
+			}else if(window.location.href.indexOf("ficha")!="-1"){
+				ficha.classList.add('hovered');
+			}else if(window.location.href.indexOf("reporte/videocantidad")!="-1"){
+				reportevideocantidad.classList.add('hovered');
+			}else if(window.location.href.indexOf("video")!="-1"){
+				video.classList.add('hovered');
+			}
+			else{
+				reportevideocantidad.classList.remove('hovered');
+				rol.classList.remove('hovered');
+				usuario.classList.remove('hovered');
+				formato.classList.remove('hovered');
+				urbanizacion.classList.remove('hovered');
+				genero.classList.remove('hovered');
+				idioma.classList.remove('hovered');
+				urbanizacion.classList.remove('hovered');
+				cliente.classList.remove('hovered');
+				video.classList.remove('hovered');
+				ficha.classList.remove('hovered');
+				datosgenerales.classList.remove('hovered');
+				listficha.classList.remove('hovered');
+				videoGerente.classList.remove('hovered');
+			}
+			
+			if(localStorage.getItem("confirmRolCreate")){
+				mensajeToast('success','Rol creada correctamente');
+				localStorage.removeItem("confirmRolCreate");
+			}
+			
+			if(localStorage.getItem("videoRestaurarForm")){
+				mensajeToast('success','Video restaurado correctamente');
+				localStorage.removeItem("videoRestaurarForm");
+			}
+			
+			if(localStorage.getItem("confirmRolEdit")){
+				mensajeToast('success','Rol editada correctamente');
+				localStorage.removeItem("confirmRolEdit");
+			}
+			if(localStorage.getItem("confirmRolDelete")){
+				mensajeToast('error','Rol eliminado correctamente');
+				localStorage.removeItem("confirmRolDelete");
+			}		
+			
+			if(localStorage.getItem("confirmDatosEdit")){
+				mensajeToast('success','Datos generales editado correctamente');
+				localStorage.removeItem("confirmDatosEdit");
+			}
+			
+			if(localStorage.getItem("confirmClienteCreate")){
+				mensajeToast('success','Cliente creado correctamente');
+				Swal.fire({
+					  icon: 'info',
+					  text: 'Username: '+localStorage.getItem("dniCliente")+' - Password: password',
+					  title: 'USUARIO !!!',
+					  showConfirmButton: true,
+				})
+				localStorage.removeItem("confirmClienteCreate");
+				localStorage.removeItem("dniCliente");
+			}
+			
+			if(localStorage.getItem("confirmClienteEdit")){
+				mensajeToast('success','Cliente editado correctamente');
+				localStorage.removeItem("confirmClienteEdit");
+			}
+			if(localStorage.getItem("confirmClienteDelete")){
+				mensajeToast('error','Cliente eliminado correctamente');
+				localStorage.removeItem("confirmClienteDelete");
+			}
+			
+			
+			
+			if(localStorage.getItem("confirmUsuarioCreate")){
+				mensajeToast('success','Usuario creado correctamente');
+				localStorage.removeItem("confirmUsuarioCreate");
+			}
+			
+			if(localStorage.getItem("confirmUsuarioEdit")){
+				mensajeToast('success','Usuario editado correctamente');
+				localStorage.removeItem("confirmUsuarioEdit");
+			}
+			if(localStorage.getItem("confirmUsuarioDelete")){
+				mensajeToast('error','Usuario eliminado correctamente');
+				localStorage.removeItem("confirmUsuarioDelete");
+			}
+			
+			
+			
+			
+			if(localStorage.getItem("confirmFormatoCreate")){
+				mensajeToast('success','Formato creado correctamente');
+				localStorage.removeItem("confirmFormatoCreate");
+			}
+			
+			if(localStorage.getItem("confirmFormatoEdit")){
+				mensajeToast('success','Formato editado correctamente');
+				localStorage.removeItem("confirmFormatoEdit");
+			}
+			if(localStorage.getItem("confirmFormatoDelete")){
+				mensajeToast('error','Formato eliminado correctamente');
+				localStorage.removeItem("confirmFormatoDelete");
+			}
+			
+			
+			
+			
+			
+			if(localStorage.getItem("confirmGeneroCreate")){
+				mensajeToast('success','Genero creado correctamente');
+				localStorage.removeItem("confirmGeneroCreate");
+			}
+			
+			if(localStorage.getItem("confirmGeneroEdit")){
+				mensajeToast('success','Genero editado correctamente');
+				localStorage.removeItem("confirmGeneroEdit");
+			}
+			if(localStorage.getItem("confirmGeneroDelete")){
+				mensajeToast('error','Genero eliminado correctamente');
+				localStorage.removeItem("confirmGeneroDelete");
+			}
+			
+			
+			
+			if(localStorage.getItem("confirmIdiomaCreate")){
+				mensajeToast('success','Idioma creado correctamente');
+				localStorage.removeItem("confirmIdiomaCreate");
+			}
+			
+			if(localStorage.getItem("confirmIdiomaEdit")){
+				mensajeToast('success','Idioma editado correctamente');
+				localStorage.removeItem("confirmIdiomaEdit");
+			}
+			if(localStorage.getItem("confirmIdiomaDelete")){
+				mensajeToast('error','Idioma eliminado correctamente');
+				localStorage.removeItem("confirmIdiomaDelete");
+			}
+			
+			
+			
+			
+			if(localStorage.getItem("confirmUrbanizacionCreate")){
+				mensajeToast('success','Urbanizacion creado correctamente');
+				localStorage.removeItem("confirmUrbanizacionCreate");
+			}
+			
+			if(localStorage.getItem("confirmUrbanizacionEdit")){
+				mensajeToast('success','Urbanizacion editado correctamente');
+				localStorage.removeItem("confirmUrbanizacionEdit");
+			}
+			if(localStorage.getItem("confirmUrbanizacionDelete")){
+				mensajeToast('error','Urbanizacion eliminado correctamente');
+				localStorage.removeItem("confirmUrbanizacionDelete");
+			}
+			
+			
+			
+			if(localStorage.getItem("confirmVideoCreate")){
+				mensajeToast('success','Video creado correctamente');
+				localStorage.removeItem("confirmVideoCreate");
+			}
+			
+			if(localStorage.getItem("confirmVideoEdit")){
+				mensajeToast('success','Video editado correctamente');
+				localStorage.removeItem("confirmVideoEdit");
+			}
+			if(localStorage.getItem("confirmVideoDelete")){
+				mensajeToast('error','Video eliminado correctamente');
+				localStorage.removeItem("confirmVideoDelete");
+			}
+			
+			
+			
+			if(localStorage.getItem("confirmFichaCreate")){
+				mensajeToast('success','Solicitud de alquiler creado correctamente');
+				localStorage.removeItem("confirmFichaCreate");
+			}
+			
+			if(localStorage.getItem("confirmFichaEdit")){
+				mensajeToast('success','Ficha editado correctamente');
+				localStorage.removeItem("confirmFichaEdit");
+			}
+			if(localStorage.getItem("confirmFichaDelete")){
+				mensajeToast('error','Solicitud DENEGADO correctamente');
+				localStorage.removeItem("confirmFichaDelete");
+			}
+			if(localStorage.getItem("confirmFichaAceptar")){
+				mensajeToast('success','Solicitud ACEPTADO correctamente');
+				localStorage.removeItem("confirmFichaAceptar");
+			}
+		}
+	</script>
+	<script src="/js/slide.js"></script>
+</body>
+</html>

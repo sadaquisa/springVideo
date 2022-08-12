@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="index :: head">
+</head>
+<meta charset="utf-8"/>
+<body>
+<div class="principal-container">
+		<div th:replace="dashboard :: navigation">
+		</div>
+		<div class="main">
+			<div th:replace="dashboard :: topbar">
+			</div>
+			<div class="content">
+					<h2>CREAR GENERO</h2>
+					<div class="space"></div>
+					<form id="generoCreateForm"  th:action="@{/genero/create}" th:object="${genero}"  method="post">
+						<div class="form-group">
+							<label for="codigo" >GENERO</label>
+							<div>
+								<input class="form-control" type="text" name="genero" onKeyUp="this.value=this.value.toUpperCase();"  id="genero" th:field="*{genero}">			
+							</div>
+							<div class="error" th:if="${#fields.hasErrors('genero')}" th:errors="*{genero}"></div>			
+						</div>							
+						<div>			
+							<a class="btn btn-info" href="#" onclick="confirmGeneroCreate()"><i class="fa-solid fa-floppy-disk"></i> GUARDAR</a>
+							<a class="btn btn-dark" th:href="@{/genero/list}"><i class="fa-solid fa-arrow-rotate-left"></i> VOLVER</a>	
+						</div>	
+					</form>
+			</div>
+		</div>
+	</div>
+	<script th:replace="dashboard :: script"></script>
+	<script>		
+		function confirmGeneroCreate(){
+			Swal.fire({
+			  title: 'CONFIRMACIÓN',
+			  text: "¿Desea guardar este nuevo Genero?",
+			  icon: 'question',
+			  showCancelButton: true,
+			  confirmButtonColor: '#3085d6',
+			  cancelButtonColor: '#d33',
+			  confirmButtonText: 'SI',
+			  cancelButtonText: 'NO'
+			}).then((result) => {
+			  if (result.isConfirmed) {
+			    $('#generoCreateForm').submit();
+				localStorage.setItem("confirmGeneroCreate",true);
+			  }
+			})
+		}
+	</script>
+</body>
+</html>

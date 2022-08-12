@@ -1,0 +1,15 @@
+.mt-100{margin-top:150px;margin-left:200px}
+.card-header{background-color:#9575CD}
+h5{color:#fff}.card-block{margin-top:10px}
+.mytooltip{position: relative;z-index: 0}
+.mytooltip .tooltip-content{
+	position: absolute;
+    z-index: 9999 !important;
+    right: 95%;
+    top: 0%;
+    opacity: 0;
+}
+.mytooltip .tooltip-content img{width: 113px}
+.mytooltip .tooltip-item::after{content: '';position: absolute;height: 20px;bottom: 100%;left: 50%;pointer-events: none;-webkit-transform: translateX(-50%);transform: translateX(-50%)}
+.mytooltip:hover .tooltip-item::after{pointer-events: auto}
+.mytooltip:hover .tooltip-content{pointer-events: auto;opacity: 1;-webkit-transform: translate3d(0, 0, 0) rotate3d(0, 0, 0, 0deg);transform: translate3d(0, 0, 0) rotate3d(0, 0, 0, 0deg)}

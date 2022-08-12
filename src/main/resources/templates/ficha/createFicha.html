@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="index :: head">
+</head>
+<meta charset="utf-8"/>
+<body>
+	<div class="principal-container">
+		<div th:replace="dashboard :: navigation"></div>
+		<div class="main">
+			<div th:replace="dashboard :: topbar"></div>
+			<div class="content">
+				<h2>SOLICITUD DE ALQUILER</h2>
+				<div class="space"></div>
+				<form id="videoFichaForm" th:action="@{/ficha/createFicha}"
+					th:object="${ficha}" method="post" enctype="multipart/form-data">
+					<div class="row">
+						<div class="col-4">
+							 <label for="codigo">CLIENTE</label>						
+							 <div class="input-group mb-3">						  
+								<input type="text" class="form-control" id="clienteSearch" name="clienteSearch" 
+										placeholder="Buscar cliente ......" aria-describedby="button-addon2" >
+								<input type="hidden" class="form-control" id="id_cliente" name="id_cliente" 
+										placeholder="Buscar cliente ......" aria-describedby="button-addon2" >												  
+								  <div class="input-group-append">
+								  <button  class="btn btn-success"  onclick="searchCliente2()" type="button" id="button-addon2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M14.53 15.59a8.25 8.25 0 111.06-1.06l5.69 5.69a.75.75 0 11-1.06 1.06l-5.69-5.69zM2.5 9.25a6.75 6.75 0 1111.74 4.547.746.746 0 00-.443.442A6.75 6.75 0 012.5 9.25z"></path></svg></button>
+								  </div>
+							  </div>									
+						</div>
+						<div class="col-8">
+						
+						</div>
+					</div>					
+					<div class="form-group">
+						<div class="row">
+							<div class="col-6">
+								<div id="datosProducto" style="display: none;">
+									<div class="row"  align="center">
+										<div class="col-12">
+											<label id="titulo"></label>
+											<label id="idVideo" style="display: none;"></label>											
+											<img id="imgfoto" name="imgfoto" 
+												style="max-width: 25%; display: none;" src="#" alt="foto" />
+										</div>									
+									</div>
+									
+									<div class="row">
+										<div class="col-4">
+											<label><b>AÑO:  </b> </label>
+											<label id="anio"></label><br> 
+											<label><b>PRECIO:  </b> </label>
+											<label id="precio"></label><br>
+											<label><b>FORMATO:  </b> </label>
+											<label id="formato"></label> 
+										</div>
+										<div class="col-4">
+											<label><b>GENEROS:  </b> </label>
+											<ul id="generos"></ul>											
+										</div>
+										<div class="col-4">											
+											<label><b>IDIOMAS:  </b> </label>
+											<ul id="idiomas"></ul>
+										</div>											
+									</div>							
+								</div>
+
+							</div>
+							<div class="col-6">
+								<label for="codigo">FECHA DE EXPIRACION</label>
+								<div>
+									<input class="form-control" type="date" name="fecha_expiracion"
+										id="fecha_expiracion" onchange="functionFecha()" th:field="*{fecha_expiracion}">
+								</div>
+								<div class="error"
+									th:if="${#fields.hasErrors('fecha_expiracion')}"
+									th:errors="*{fecha_expiracion}"></div>
+								<label for="codigo">VIDEOS</label>
+								<div>														
+									<div class="input-group mb-3">							  
+										<input type="text" class="form-control" id="videoSearch" name="videoSearch" 
+												placeholder="Buscar video ......" aria-describedby="button-addon2" >										  
+									  <div class="input-group-append">
+									    <button  class="btn btn-success"  onclick="searchVideo()" type="button" id="button-addon2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M14.53 15.59a8.25 8.25 0 111.06-1.06l5.69 5.69a.75.75 0 11-1.06 1.06l-5.69-5.69zM2.5 9.25a6.75 6.75 0 1111.74 4.547.746.746 0 00-.443.442A6.75 6.75 0 012.5 9.25z"></path></svg></button>
+									  </div>
+									</div>									
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-10"></div>
+						<div class="col-2" align="right">
+							<button name="btnAñadir" type="button" onclick="detalleVideos()"
+								id="btnAñadir" class="btn btn-info">
+								<span>Añadir</span>
+							</button>
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<div class="col-12" align="center">
+							<div class="table-responsive-lg">
+								<table class="table table-bordered" id="detalle">
+									<thead>
+										<tr>
+											<th>TITULO</th>
+											<th>DIAS DE ALQUILER</th>
+											<th>PRECIO</th>
+											<th>SUBTOTAL</th>
+											<th>ACCIONES</th>
+										</tr>
+									</thead>
+								</table>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-10"></div>
+						<div class="col-2">
+							<label>TOTAL: </label> <label id="total">0.00</label><br>
+						</div>
+					</div>
+					
+					<label for="codigo">COMENTARIO</label>
+					<div>
+						<input class="form-control" type="text" name="comentario"
+							id="comentario" th:field="*{comentario}">
+					</div><br>
+					<div>
+						<a class="btn btn-info" href="#" onclick="confirmFichaCreate()"><i
+							class="fa-solid fa-floppy-disk"></i> GUARDAR</a> <a
+							class="btn btn-dark" th:href="@{/ficha/list}"><i
+							class="fa-solid fa-arrow-rotate-left"></i> VOLVER</a>
+					</div>				
+				</form>
+			</div>
+		</div>
+		<!-- Modal -->
+		
+		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-lg" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">DATOS GENERALES</h5>
+		        <button type="button" class="close" data-dismiss="modal" onclick="closess()" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+	        		<div class="row">
+							<div class="col-6" align="center">
+								<img id="imgcliente"  name="imgcliente" style="max-width: 100%;"   />	
+							</div>
+							<div class="col-6">
+								<label for="codigo" >DNI</label>
+								<div>
+								<input disabled="true" class="form-control" type="text" name="dni" id="dni" >			
+								</div>
+								<label for="codigo" >NOMBRES</label>
+								<div>
+									<input  disabled="true" class="form-control" type="text" name="nombres" id="nombres" >			
+								</div>
+								<label for="codigo" >EDAD</label>
+								<div>
+									<input  disabled="true" class="form-control" type="text" name="edad" id="edad" >			
+								</div>
+								<label for="codigo" >GENERO</label>
+								<div>
+									<input  disabled="true" class="form-control" type="text" name="genero" id="genero" >
+								</div>
+								<label for="codigo" >TELEFONO</label>
+								<div>
+									<input  disabled="true" class="form-control" type="text" name="telefono" id="telefono">			
+								</div>
+								<label for="codigo" >URBANIZACION</label>
+								<div>
+									<input  disabled="true" class="form-control" type="text" name="urbanizacion" id="urbanizacion" >
+								</div>
+									<label for="codigo" >DIRECCION</label>
+								<div>
+									<input  disabled="true" class="form-control" type="text" name="direccion" id="direccion" >			
+								</div>										
+							</div>					
+					</div>	
+		      </div>		     
+		    </div>
+		  </div>
+		</div>		
+	</div>
+	<script th:replace="dashboard :: script"></script>
+	<script>
+			var detalle=[],id_videoAux=0,titulo="",id_video=0,agregarCli=false, 
+			agregar=false,nombres="",id_cliente=0,id_clienteAux=0;	
+			function closess(){
+				$('#exampleModal').modal('hide');
+			}			
+			function functionFecha(){				
+				 if(detalle.length>0){
+					 $("#detalle tbody").remove();		                
+		               for(var i=0;i<detalle.length;i++){
+		            	  	var fechaActual = new Date(FechaActual1()).getTime();
+							var fechaExperacion= new Date(document.getElementById('fecha_expiracion').value).getTime();
+							var dias= Math.round((fechaExperacion-fechaActual) / (1000 * 60 * 60 * 24));
+							var precio=detalle[i].precio;
+							var subtotal = parseFloat(parseFloat(precio)*dias).toFixed(2);
+							
+		            	   var fila=' <tbody>'+
+		                   '<tr id="fila'+detalle[i].i+'">'+
+		                       '<td >'+'<input type="hidden" name="id_videos[]" value="'+ detalle[i].id +'" readonly style="width:50px; text-align:right;">'+
+		                       			detalle[i].titulo+
+		                           '</td>'+
+		                       ' <td >'+'<input type="hidden" name="dias[]" value="'+ dias +'" readonly style="width:50px; text-align:right;">'+
+		                           	dias+
+		                           '</td>'+
+		                       '<td >'+'<input type="hidden" name="costos[]" value="'+precio +'" readonly style="width:50px; text-align:right;">'+
+		                       	precio+
+		                           '</td>'+ 
+		                           '<td >'+'<input type="hidden" name="subtotales[]" value="'+ subtotal +'" readonly style="width:50px; text-align:right;">'+
+		                       	   subtotal+
+		                           '</td>'+ 
+		                       '<td>'
+		                       +'<button type="button" onclick="SwalDetalle('+detalle[i].id+');"class="btn btn-danger'+
+		                       ' btn-xs" ><i class="fa-solid fa-trash-can" ></i></td>'+                               
+		                       '</tr>'+
+		                   '</tbody>'
+		                   detalle[i].cantidad=dias;
+		                   detalle[i].subtotal=subtotal;		                   
+		                   $('#detalle').append(fila);
+		               }
+		               sumaTotal();
+		               Toast.fire({
+		                    icon: 'success',
+		                    title: 'Dias de alquiler modificado exitosamente'
+		            	})
+				 }		
+			}
+			window.onload = function(){
+				document.getElementById('fecha_expiracion').value=FechaActual();
+				document.getElementById('fecha_expiracion').min=FechaActual();
+				autocomplet();
+				searchCliente();
+			}
+			
+		
+			function FechaActual(){
+				var fecha = new Date(); //Fecha actual
+				var mes = fecha.getMonth()+1; //obteniendo mes
+				var dia = fecha.getDate()+1; //obteniendo dia
+				var anio = fecha.getFullYear(); //obteniendo año
+					if(dia<10)
+						dia='0'+dia; //agrega cero si el menor de 10
+					if(mes<10)
+					mes='0'+mes //agrega cero si el menor de 10
+				return anio+"-"+mes+"-"+dia;
+			}
+			
+			function FechaActual1(){
+				var fecha = new Date(); //Fecha actual
+				var mes = fecha.getMonth()+1; //obteniendo mes
+				var dia = fecha.getDate(); //obteniendo dia
+				var anio = fecha.getFullYear(); //obteniendo año
+					if(dia<10)
+						dia='0'+dia; //agrega cero si el menor de 10
+					if(mes<10)
+					mes='0'+mes //agrega cero si el menor de 10
+				return anio+"-"+mes+"-"+dia;
+			}
+			function confirmFichaCreate(){
+				Swal.fire({
+				  title: 'CONFIRMACIÓN',
+				  text: "¿Desea guardar este nueva ficha?",
+				  icon: 'question',
+				  showCancelButton: true,
+				  confirmButtonColor: '#3085d6',
+				  cancelButtonColor: '#d33',
+				  confirmButtonText: 'SI',
+				  cancelButtonText: 'NO'
+				}).then((result) => {
+				  if (result.isConfirmed) {
+				    $('#videoFichaForm').submit();
+					localStorage.setItem("confirmFichaCreate",true);
+				  }
+				})
+			}
+			
+			function sumaTotal(){
+				var total=0;
+				var tam=detalle.length;
+				for(var j=0;j<tam;j++){
+					total=total +parseFloat(detalle[j].subtotal);
+				}
+				document.getElementById('total').innerHTML=parseFloat(total).toFixed(2);				
+				//console.log(total);
+			}
+					
+			
+			function detalleVideos(){				
+				if(agregar){
+					var fechaActual = new Date(FechaActual1()).getTime();
+					var fechaExperacion= new Date(document.getElementById('fecha_expiracion').value).getTime();
+					var dias= Math.round((fechaExperacion-fechaActual) / (1000 * 60 * 60 * 24));
+					var precio=parseFloat(document.getElementById('precio').innerHTML).toFixed(2)
+					var subtotal = parseFloat(parseFloat(document.getElementById('precio').innerHTML)*dias).toFixed(2);
+					var fila=' <tbody>'+
+	                '<tr id="fila'+document.getElementById('idVideo').innerHTML+'">'+
+	                    '<td >'+'<input type="hidden" name="id_videos[]" value="'+ document.getElementById('idVideo').innerHTML +'" readonly style="width:50px; text-align:right;">'+
+	                          document.getElementById('titulo').innerHTML+
+	                        '</td>'+
+	                    ' <td >'+'<input type="hidden" name="dias[]" value="'+ dias +'" readonly style="width:50px; text-align:right;">'+
+	                        	dias+
+	                        '</td>'+
+	                    '<td >'+'<input type="hidden" name="costos[]" value="'+ precio +'" readonly style="width:50px; text-align:right;">'+
+	                    	precio+
+	                        '</td>'+ 
+	                        '<td >'+'<input type="hidden" name="subtotales[]" value="'+ subtotal +'" readonly style="width:50px; text-align:right;">'+
+	                    	   subtotal+
+	                        '</td>'+ 
+	                    '<td>'
+	                    +'<button type="button" onclick="SwalDetalle('+document.getElementById('idVideo').innerHTML+');"class="btn btn-danger'+
+	                    ' btn-xs" ><i class="fa-solid fa-trash-can" ></i></td>'+                               
+	                    '</tr>'+
+	                '</tbody>' 
+	                
+	                 $('#detalle').append(fila); 
+
+	                detalle.push({ 
+	                    id:document.getElementById('idVideo').innerHTML, 
+	                    titulo:document.getElementById('titulo').innerHTML,
+	                    precio:precio,
+	                    cantidad:dias,
+	                    subtotal:subtotal
+	                });
+	                sumaTotal();
+	                console.log(detalle);
+	                Toast.fire({
+	                    icon: 'success',
+	                    title: 'Video agregado correctamente'
+	            	})
+	            	autocomplet();
+                    document.getElementById("datosProducto").style.display = "none";
+				}else{
+					 Toast.fire({
+		                    icon: 'error',
+		                    title: 'Seleccione un video'
+		            })
+				}		
+				
+			}
+			
+			function datosVideos(id){
+					$.ajax({
+				        type: "GET",
+				        contentType: "application/json",
+				        url: "/ficha/video/"+id,
+				        dataType: 'json',
+				        cache: false,
+				        success: function (data) {
+				        	//console.log("SUCCESS : ", data);
+		                    document.getElementById("datosProducto").style.display = "block";
+				        	document.getElementById('titulo').innerHTML = data.titulo.toUpperCase();
+				        	document.getElementById('precio').innerHTML = data.precio;
+				        	document.getElementById('anio').innerHTML = data.anio;
+				        	document.getElementById('formato').innerHTML = data.formato.formato;
+		                    document.getElementById("imgfoto").style.display = "block";
+			                $('#imgfoto').attr('src', "/foto_video/"+data.portada);		                
+			                var htmlGenero="";
+			                for(var i=0;i<data.list_video_genero.length;i++){
+			                	htmlGenero+= "<li>" + data.list_video_genero[i].genero.genero + "</li>"; 
+			                }
+			                
+			                var htmlIdioma="";
+			                for(var i=0;i<data.list_video_idioma.length;i++){
+			                	htmlIdioma+= "<li>" + data.list_video_idioma[i].idioma.idioma + "</li>"; 
+			                }
+			                document.getElementById('idVideo').innerHTML = data.id_video;
+
+			                
+			                document.getElementById('generos').innerHTML = htmlGenero;
+			                
+			                document.getElementById('idiomas').innerHTML = htmlIdioma;
+
+
+
+				        },
+				        error: function (e) {
+				            console.log("ERROR : ", e);
+				        }
+				   }); 
+							  
+			}	
+		    function eliminardetalle(index){ 		           
+		        tam=detalle.length;
+		        var i=0;
+		        var pos;
+		        while (i<tam)
+		        {
+		             if (detalle[i].id==index)
+		            {
+		                pos=i;
+		                break;
+		            }
+		            i=i+1;
+		        }
+		        detalle.splice(pos,1);
+		        $('#fila'+index).remove();
+		        sumaTotal();
+		        videosSelect();
+		    }
+		    
+		    function SwalDetalle(id){
+	            Swal.fire({
+	                title: 'CONFIRMACIÓN',
+	                text: '¿Desea eliminar le video?',
+	                icon: 'question',
+	                showCancelButton: true,
+	                confirmButtonColor: '#28a745',
+	                cancelButtonColor: '#dc3545',
+	                confirmButtonText: 'SI',
+	                cancelButtonText: 'NO'
+	            }).then(function(result){
+	                if(result.isConfirmed){
+	                	eliminardetalle(id);
+	                	Toast.fire({
+		                    icon: 'error',
+		                    title: 'Video eliminado correctamente'
+		            	})
+	                }
+	            })
+	        }
+		      
+		   
+		    $("#fotoinput").change(function() { //Cuando el input cambie (se cargue un nuevo archivo) se va a ejecutar de nuevo el cambio de imagen y se verá reflejado.
+			    readURL(this);		    	
+		    });
+		    
+		    function autocomplet(){
+				id_videoAux=0;
+		    	$("#videoSearch").autocomplete({
+					source : function(request, response) {
+						$.ajax({
+							url : "/ficha/ListProducto/"+request.term,
+							dataType : "json",
+							data : {
+								term : request.term
+							},
+							success : function(data) {
+								var datosVideos=[];
+								for(var i=0;i<data.length;i++){
+									var tam=detalle.length,ver=true;
+				                    for(var j=0;j<tam;j++){
+				                    	if(parseFloat(detalle[j].id)==data[i].id_video){
+				                    		ver=false;
+				                    		break;
+				                    	}
+				                    }
+				                    if(ver){
+				                    	datosVideos.push(data[i]);
+				                    }
+								}
+								response($.map(datosVideos, function(item) {									
+									return {
+										value : item.titulo,
+										label : item.titulo,	
+										id:item.id_video
+									};
+								}));
+							},
+						});
+					},
+					select : function(event, ui) {
+						document.getElementById('videoSearch').value=ui.item.value;
+						id_video=ui.item.id;
+						id_videoAux=ui.item.id;
+						titulo=ui.item.value;
+					}
+				});					
+		    }	    
+		    
+		    function searchVideo(){
+		    	if(titulo!=document.getElementById('videoSearch').value){
+		    		id_videoAux=0;
+		    	}else{
+		    		id_videoAux=id_video;
+		    	}
+		    	
+		    	if(id_videoAux==0){
+		    		Toast.fire({
+	                    icon: 'error',
+	                    title: 'No existe el video ingresado'
+	            	})
+		    	}else{
+		    		datosVideos(id_videoAux);
+		    		Toast.fire({
+	                    icon: 'success',
+	                    title: 'Producto encontrado'
+	            	})
+	            	agregar=true;
+			    	document.getElementById('videoSearch').value="";
+		    	}
+		    }
+		    
+		    function searchCliente(){
+		    	$("#clienteSearch").autocomplete({
+					source : function(request, response) {
+						$.ajax({
+							url : "/cliente/clientes/" + request.term,
+							dataType : "json",
+							data : {
+								term : request.term
+							},
+							success : function(data) {
+								response($.map(data, function(item) {
+									return {
+										value : item.dninombres,
+										label : item.dninombres,
+										dni:item.dni,
+										foto:item.foto,
+										id:item.id,
+										direccion:item.direccion,
+										edad:item.edad,
+										genero:item.genero,
+										telefono:item.telefono,
+										nombresCli:item.nombres,
+										urbanizacion:item.urbanizacion
+									};
+								}));
+							},
+						});
+					},
+					select : function(event, ui) {
+						nombres=ui.item.value;
+						id_cliente=ui.item.id;
+						id_clienteAux=ui.item.id;
+						document.getElementById('clienteSearch').value=ui.item.value;
+						document.getElementById('dni').value=ui.item.dni;
+						document.getElementById('nombres').value=ui.item.nombresCli;
+						document.getElementById('direccion').value=ui.item.direccion;
+						document.getElementById('edad').value=ui.item.edad;
+						document.getElementById('telefono').value=ui.item.telefono;
+						document.getElementById('genero').value=ui.item.genero;
+						document.getElementById('urbanizacion').value=ui.item.urbanizacion;
+						document.getElementById('id_cliente').value=ui.item.id;
+						$('#imgcliente').attr('src', "/foto_cliente/"+ui.item.foto);
+						
+					}		
+				});	
+
+		    }	    
+		  
+		    
+		    function searchCliente2(){
+		    	if(nombres!=document.getElementById('clienteSearch').value){
+		    		id_clienteAux=0;
+		    	}else{
+		    		id_clienteAux=id_cliente;
+		    	}
+		    	
+		    	if(id_clienteAux==0){
+		    		Toast.fire({
+	                    icon: 'error',
+	                    title: 'No existe el cliente ingresado'
+	            	})
+		    	}else{
+		    		Toast.fire({
+	                    icon: 'success',
+	                    title: 'Cliente encontrado'
+	            	})
+	            	$('#exampleModal').modal('show');
+		    	}
+		    }
+		
+		</script>
+</body>
+
+</html>
